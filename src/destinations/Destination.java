@@ -1,29 +1,29 @@
 package destinations;
-
+//test
 import information.*;
 
 /** 
  * Classe Abstraite d'un composant destination d'informations dont les
- * éléments sont de type T
+ * elements sont de type T
  * @author prou
  */
 public  abstract class Destination <T> implements DestinationInterface <T> {
     
     /** 
-     * l'information reçue par la destination
+     * l'information recue par la destination
      */
     protected Information <T>  informationRecue;
     
     /** 
      * un constructeur factorisant les initialisations communes aux
-     * réalisations de la classe abstraite Destination
+     * realisations de la classe abstraite Destination
      */
     public Destination() {
 	informationRecue = null;
     }
 
     /**
-     * retourne la dernière information reçue par la destination
+     * retourne la derniere information recue par la destination
      * @return une information   
      */
     public Information  <T>  getInformationRecue() {
@@ -31,8 +31,8 @@ public  abstract class Destination <T> implements DestinationInterface <T> {
     }
    	    
     /**
-     * reçoit une information
-     * @param information  l'information  à recevoir
+     * recoit une information
+     * @param information  l'information a recevoir
      */
     public  abstract void recevoir(Information <T> information) throws InformationNonConformeException;  
 }

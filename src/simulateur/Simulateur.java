@@ -1,12 +1,14 @@
 package simulateur;
 import destinations.Destination;
 import destinations.DestinationFinale;
+import information.Information;
 import sources.Source;
 import sources.SourceAleatoire;
-import sources.SourceFix;
+import sources.SourceFixe;
 import transmetteurs.Transmetteur;
 import transmetteurs.TransmetteurParfait;
 import visualisations.Sonde;
+import visualisations.SondeLogique;
 
 
 /** La classe Simulateur permet de construire et simuler une chaîne de
@@ -62,35 +64,32 @@ public class Simulateur {
     	
     	// analyser et récupérer les arguments   	
     	analyseArguments(args);
-      
-    	/*
-    	// sonde
-    	if ( affichage == true ) {
-    		Sonde sonde = new Sonde();
-    	}
-    	*/
-    	
+ 
     	// instanciation de la source suivant la valeur des arguments
-    	if ( messageAleatoire == true || aleatoireAvecGerme == true ) {
-    		source = new SourceAleatoire();
-    	}
-    	else if ( messageAleatoire == false ) {
-    		source = new SourceFix(messageString);
+    	if ( messageAleatoire == true ) {
+    		source = new SourceAleatoire(messageString, seed);
+    	} else if ( messageAleatoire == false ) {
+    		source = new SourceFixe(messageString);
     	}
     	
     	// instanciation de(s) transmetteur(s)
-    	
     	transmetteurLogique = new TransmetteurParfait();
-    	
     	
     	// instanciation de la destination
       	destination = new DestinationFinale();
       	
-      	// connexion des différents composants entre eux
-      	source.connecter(destination);
-      	transmetteurLogique.connecter(destination);
+    	// sonde
+    	if ( affichage == true ) {
+    		Sonde<Boolean> sondeE = new SondeLogique("Sonde Entree", 10);
+    		Sonde<Boolean> sondeS = new SondeLogique("Sonde Sortie", 10);
+    		source.connecter(sondeE);
+    		transmetteurLogique.connecter(sondeS);
+    	}
       	
-    	
+      	// connexion des différents composants entre eux
+      	source.connecter(transmetteurLogique);
+      	transmetteurLogique.connecter(destination);
+
     }
    
    
@@ -167,9 +166,7 @@ public class Simulateur {
      *
      */ 
     public void execute() throws Exception {      
-         
-    	// TODO : typiquement source.emettre(); 
-      	     	      
+    	source.emettre();
     }
    
    	   	
@@ -181,9 +178,21 @@ public class Simulateur {
      */   	   
     public float  calculTauxErreurBinaire() {
 
-    	// TODO : A compléter
-
-    	return  0.0f;
+    	// réception
+    	Information<Boolean> signalRecu = destination.getInformationRecue();
+    	
+    	// calcul
+    	Information<Boolean> signalEmis = source.getInformationEmise();
+    	int longueurEmission = signalEmis.nbElements();
+    	int nbErreurs = 0;
+    	
+    	for ( int i=0 ; i<longueurEmission ; i++) {
+    		if ( signalRecu.iemeElement(i) != signalEmis.iemeElement(i) ) {
+    			nbErreurs += 1;
+    		}
+    	}
+    	float teb = ((float)nbErreurs/(float)longueurEmission)*100;
+    	return  teb;
     }
    
    
