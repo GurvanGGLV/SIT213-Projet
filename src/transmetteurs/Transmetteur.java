@@ -8,32 +8,32 @@ import java.util.*;
 
 /** 
  * Classe Abstraite d'un composant transmetteur d'informations dont
- * les éléments sont de type R en entrée et de type E en sortie;
- * l'entrée du transmetteur implémente l'interface
- * DestinationInterface, la sortie du transmetteur implémente
+ * les ï¿½lï¿½ments sont de type R en entrï¿½e et de type E en sortie;
+ * l'entrï¿½e du transmetteur implï¿½mente l'interface
+ * DestinationInterface, la sortie du transmetteur implï¿½mente
  * l'interface SourceInterface
  * @author prou
  */
 public abstract  class Transmetteur <R,E> implements  DestinationInterface <R>, SourceInterface <E> {
    
     /** 
-     * la liste des composants destination connectés en sortie du transmetteur 
+     * la liste des composants destination connectï¿½s en sortie du transmetteur 
      */
     protected LinkedList <DestinationInterface <E>> destinationsConnectees;
    
     /** 
-     * l'information reÃ§ue en entrée du transmetteur 
+     * l'information reÃ§ue en entrï¿½e du transmetteur 
      */
     protected Information <R>  informationRecue;
 		
     /** 
-     * l'information émise en sortie du transmetteur
+     * l'information ï¿½mise en sortie du transmetteur
      */		
     protected Information <E>  informationEmise;
    
     /** 
      * un constructeur factorisant les initialisations communes aux
-     * réalisations de la classe abstraite Transmetteur
+     * rï¿½alisations de la classe abstraite Transmetteur
      */
     public Transmetteur() {
 	destinationsConnectees = new LinkedList <DestinationInterface <E>> ();
@@ -42,7 +42,7 @@ public abstract  class Transmetteur <R,E> implements  DestinationInterface <R>, 
     }
    	
     /**
-     * retourne la derniÃ¨re information reÃ§ue en entrée du
+     * retourne la derniÃ¨re information reÃ§ue en entrï¿½e du
      * transmetteur
      * @return une information   
      */
@@ -51,7 +51,7 @@ public abstract  class Transmetteur <R,E> implements  DestinationInterface <R>, 
     }
 
     /**
-     * retourne la derniÃ¨re information émise en sortie du
+     * retourne la derniÃ¨re information ï¿½mise en sortie du
      * transmetteur
      * @return une information   
      */
@@ -68,22 +68,22 @@ public abstract  class Transmetteur <R,E> implements  DestinationInterface <R>, 
     }
 
     /**
-     * déconnecte une destination de la la sortie du transmetteur
-     * @param destination  la destination Ã  déconnecter
+     * dï¿½connecte une destination de la la sortie du transmetteur
+     * @param destination  la destination Ã  dï¿½connecter
      */
     public void deconnecter (DestinationInterface <E> destination) {
 	destinationsConnectees.remove(destination); 
     }
    	    
     /**
-     * reÃ§oit une information.  Cette méthode, en fin d'exécution,
-     * appelle la méthode émettre.
+     * reÃ§oit une information.  Cette mï¿½thode, en fin d'exï¿½cution,
+     * appelle la mï¿½thode ï¿½mettre.
      * @param information  l'information  reÃ§ue
      */
     public  abstract void recevoir(Information <R> information) throws InformationNonConformeException;
    
     /**
-     * émet l'information construite par le transmetteur
+     * ï¿½met l'information construite par le transmetteur
      */
     public  abstract void emettre() throws InformationNonConformeException;   
 }
