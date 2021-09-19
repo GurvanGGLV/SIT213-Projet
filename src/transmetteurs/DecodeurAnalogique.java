@@ -34,17 +34,20 @@ public class DecodeurAnalogique extends Transmetteur<Float, Boolean>
 	@Override
 	public void emettre() throws InformationNonConformeException 
 	{
-		if (forme.equalsIgnoreCase("NRZT")) {
+		if (forme.equalsIgnoreCase("NRZT")) 
+		{
 			demodNRZT(nEch, max, min);
 		} // continuer pour les autres encodages
 
 		
-		if(forme.equalsIgnoreCase("NRZ")) {
-			
+		if(forme.equalsIgnoreCase("NRZ")) 
+		{
+			demodNRZ(nEch, max, min);
 		}
 		
-		if(forme.equalsIgnoreCase("RZ")) {
-			
+		if(forme.equalsIgnoreCase("RZ")) 
+		{
+			demodRZ(nEch, max, min);
 		}
 		
 		for (DestinationInterface <Boolean> destinationConnectee : destinationsConnectees) {
