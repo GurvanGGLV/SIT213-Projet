@@ -69,14 +69,24 @@ public class DecodeurAnalogique extends Transmetteur<Float, Boolean>
             }
             else 
             {
-        	informationNumerique.add(false);
+            	informationNumerique.add(false);
             }
         }
 	}
 	
 	public void demodNRZ(int nEch, float max, float min) throws InformationNonConformeException
 	{
-		//TODO
+		for (int i = 0 ; i < informationRecue.nbElements() ; i++)
+		{
+            if(informationRecue.iemeElement(i) == max) 
+            {
+                informationNumerique.add(true);
+            }
+            else 
+            {
+            	informationNumerique.add(false);
+            }
+        }
 	}
 	
 	public void demodRZ(int nEch, float max, float min) throws InformationNonConformeException
