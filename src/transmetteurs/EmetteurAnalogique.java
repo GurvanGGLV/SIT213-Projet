@@ -84,6 +84,7 @@ public class EmetteurAnalogique extends Transmetteur<Boolean, Float> {
 					float init = 0;
 					for (int j = 0; j < dist; j++) {
 						informationAnalogique.add(init);
+						System.out.println(init);
 						init += pasP;
 					}
 					for (int j = 0; j < dist; j++) {

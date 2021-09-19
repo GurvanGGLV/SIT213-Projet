@@ -98,17 +98,23 @@ public class Simulateur {
       	    
       	// création d'un emetteur analogique si précisé en argument
       	if ( transAnalogique == true ) {
+      		//instanciation de l'émetteur et du décodeur
       		EmetteurAnalogique emetteurAnalogique = new EmetteurAnalogique(form, ne, min, max); 
       		DecodeurAnalogique decodeurAnalogique = new DecodeurAnalogique(form, ne, min, max);
+      		
+      		// connexion des différents éléments du système
       		source.connecter(emetteurAnalogique);
       		emetteurAnalogique.connecter(decodeurAnalogique);
+      		decodeurAnalogique.connecter(destination);
+      		
+      		// sondes
       		if (affichage == true) {
+      			Sonde<Boolean> sondeL = new SondeLogique("Sonde Logique", 10);
     			Sonde<Float> sondeE = new SondeAnalogique("Sonde Analogique Entree");
-    			Sonde<Boolean> sondeL = new SondeLogique("Sonde Logique", 10);
-    			emetteurAnalogique.connecter(sondeE);
+    			Sonde<Boolean> sondeLS = new SondeLogique("Sonde Logique Sortie", 10);
     			source.connecter(sondeL);
-    			//decodeurAnalogique.connecter(destinationFinale);
-    			// + faire une nouvelle sonde logique qui récupère le signal logique
+    			emetteurAnalogique.connecter(sondeE);
+    			decodeurAnalogique.connecter(sondeLS);
       		}
       	}
       	
@@ -121,7 +127,7 @@ public class Simulateur {
         		transmetteurLogique.connecter(sondeS);
     	}
 
-      	// connexion des diff�rents composants entre eux
+      	// connexion des différents composants entre eux
       	source.connecter(transmetteurLogique);
       	transmetteurLogique.connecter(destination);
 

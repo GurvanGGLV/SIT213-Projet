@@ -58,16 +58,75 @@ public class DecodeurAnalogique extends Transmetteur<Float, Boolean>
 	{
 		informationNumerique = new Information <Boolean> ();
 		
+		float pasP = calculPasPositif(nEch, max);
+		float pasN = calculPasNegatif(nEch, min);
+		float dist = nEch / 3;
+		float init = 0;
+		
 		Iterator <Float> bitCourant = informationRecue.iterator();
 		
 		for (int i = 0; i < informationRecue.nbElements(); i++) 
 		{
-			if(bitCourant.next() == 1)
+			init = init + dist;
+			if(bitCourant.next() == max)
 			{
+				init = init - dist;
+				for(int j = 0; j < dist; j++)
+				{
+					informationNumerique.add(true);
+				}
+				init = init + dist;
 				
 			}
+			else
+			{
+				init = init - dist;
+				for(int j = 0; j < dist; j++)
+				{
+					informationNumerique.add(false);
+				}
+				init = init + dist;
+			}
 		}
-		
+	}
+	
+	
+	/**
+	 * Cette méthode permet de calculer pour true la valeur du pas
+	 * 
+	 * @param max  - valeur du maximum qu'atteindra la valeur float pour true
+	 * @param nEch - nombre d'échantillons du signal
+	 * @return - un float étant la valeur du pas
+	 */
+	public float calculPasPositif(int nEch, float max) {
+
+		float xA = 0;
+		float xB = (float) nEch / 3;
+		float yA = 0;
+		float yB = max;
+
+		float pas = (yB - yA) / (xB - xA);
+
+		return pas;
+	}
+
+	/**
+	 * Cette méthode permet de calculer pour true la valeur du pas
+	 * 
+	 * @param max  - valeur du maximum qu'atteindra la valeur float pour true
+	 * @param nEch - nombre d'échantillons du signal
+	 * @return - un float étant la valeur du pas
+	 */
+	public float calculPasNegatif(int nEch, float min) {
+
+		float xA = 0;
+		float xB = (float) nEch / 3;
+		float yA = 0;
+		float yB = min;
+
+		float pas = (yB - yA) / (xB - xA);
+
+		return pas;
 	}
 
 }
