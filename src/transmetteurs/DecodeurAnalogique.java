@@ -70,22 +70,18 @@ public class DecodeurAnalogique extends Transmetteur<Float, Boolean>
 			init = init + dist;
 			if(bitCourant.next() == max)
 			{
-				init = init - dist;
-				for(int j = 0; j < dist; j++)
+				for(int j = 0; j < nEch; j++)
 				{
 					informationNumerique.add(true);
 				}
-				init = init + dist;
 				
 			}
 			else
 			{
-				init = init - dist;
-				for(int j = 0; j < dist; j++)
+				for(int j = 0; j < nEch; j++)
 				{
 					informationNumerique.add(false);
 				}
-				init = init + dist;
 			}
 		}
 	}
