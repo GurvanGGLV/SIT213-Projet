@@ -63,7 +63,85 @@ public class EmetteurAnalogique extends Transmetteur<Boolean, Float> {
 		}
 		this.informationEmise = informationAnalogique;
 	}
-
+	
+	/**
+	 * La methode NRZ est un mode de transmission de l'information, elle permet 
+	 * de transmettre l'information numerique en analogique par la simulation d'un signal rectangulaire.
+	 * Les valeurs fixees des parametres permettent d'avoir un signal jonglant entre les negatifs <min> et les positifs <max>
+	 *  
+	 * @param nEch
+	 * @param max
+	 * @param min
+	 * @throws InformationNonConformeException
+	 * 
+	 */
+	
+	public void NRZ(int nEch, float max, float min) throws InformationNonConformeException {
+		
+		informationAnalogique = new Information<Float>();
+		
+		for(int i = 0 ; i < this.informationRecue.nbElements() ; i++) { // 1
+			for (int k = 0 ; k < nEch ; k++) { // 2
+				
+				// Les elements du message sont parcourus 1 a 1, chaque element est ensuite decompose en nEch nombre d'echantillon
+				// la boucle "1" parcourt le message binaire tandis que la boucle "2" recompose l'information logique en une multitude de points => approximation du signal analogique
+			
+				if(this.informationRecue.iemeElement(i)) {
+					informationAnalogique.add(max); 
+				}
+				else informationAnalogique.add(min); 
+			}
+		}	
+	}
+	
+	/**
+	 * La methode RZ est un mode de transmission de l'information, elle permet de transmettre
+	 * l'information numerique en analogique par la simulation d'un signal rectangulaire qui 
+	 * ne prendra ses valeurs qu'entre <max> et <0>.
+	 * 
+	 * @param nEch
+	 * @param max
+	 * @throws InformationNonConformeException
+	 * 
+	 */
+	
+	public void RZ(int nEch, float max) throws InformationNonConformeException {
+		
+		informationAnalogique = new Information<Float>();
+		
+		for(int i = 0 ; i < this.informationRecue.nbElements() ; i++) { 
+			for (int k = 0 ; k < nEch/3; k++) { 
+				if(this.informationRecue.iemeElement(i)) {
+					informationAnalogique.add((float) 0); 
+				}
+			}
+			for (int j = 0 ; j > nEch/3  ; j++) {
+				if(this.informationRecue.iemeElement(i)) {
+					informationAnalogique.add(max); 
+				}
+			}
+			for (int l = 0 ; l < nEch/3; l++) { 
+				if(this.informationRecue.iemeElement(i)) { 
+					informationAnalogique.add((float) 0);
+				}
+			}
+		}
+	}
+	
+	/**
+	 * La methode nRZT est un mode de transmission de l'information, elle permet de transmettre
+	 * l'information numerique en analogique par la simulation d'un signal rectangulaire qui 
+	 * ne prendra ses valeurs qu'entre <max> et <min> cependant, contrairement a la methode NRT, 
+	 * cette methode n'aura pas d'echelon lors des changements de valeurs. La transition entre la valeur <max> et <min>
+	 * se fera par un pas incremental.
+	 * 
+	 * @param nEch
+	 * @param max
+	 * @param min
+	 * @throws InformationNonConformeException
+	 * 
+	 */
+	
 	public void nRZT(int nEch, float max, float min) throws InformationNonConformeException {
 
 		informationAnalogique = new Information<Float>();
