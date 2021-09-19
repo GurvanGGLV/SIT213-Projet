@@ -61,7 +61,7 @@ public class DecodeurAnalogique extends Transmetteur<Float, Boolean>
 	{
 		informationNumerique = new Information <Boolean> ();
 		
-		for (int i = (nEch/3)-1; i<informationRecue.nbElements(); i=i+nEch)
+		for (int i = (nEch/3); i<informationRecue.nbElements(); i=i+nEch)
 		{
             if(informationRecue.iemeElement(i) == max) 
             {
