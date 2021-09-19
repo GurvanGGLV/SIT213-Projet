@@ -1,10 +1,19 @@
 package transmetteurs;
 
-// bonjour test 1
-
-// bonjour je suis le test 2
-
-// bonjour, je suis le test d'Aurélien
+/**
+ * Nom de classe 			: EmetteurAnalogique
+ * 
+ * Description 				: Cette classe se compose des methodes recevoir() et emettre() ainsi que 
+ * 							  des methodes de transmission de l'information. Elle a pour but de formater l'information numerique
+ * 							  en une information analogique.
+ * 
+ * Version 					: 1.0
+ * 
+ * Date 					: 19/09/2021
+ * 
+ * Copyright 				: Gurvan, Christopher, Alexandre, Aurelien Promotion 2023 FIP 2A
+ * 
+ */
 
 import java.util.Iterator;
 
@@ -51,11 +60,11 @@ public class EmetteurAnalogique extends Transmetteur<Boolean, Float> {
 
 		
 		if(forme.equalsIgnoreCase("NRZ")) {
-			
+			NRZ(nEch, max, min);
 		}
 		
 		if(forme.equalsIgnoreCase("RZ")) {
-			
+			RZ(nEch, max);
 		}
 		
 		for (DestinationInterface<Float> destinationConnectee : destinationsConnectees) {
@@ -109,8 +118,9 @@ public class EmetteurAnalogique extends Transmetteur<Boolean, Float> {
 		
 		informationAnalogique = new Information<Float>();
 		
-		for(int i = 0 ; i < this.informationRecue.nbElements() ; i++) { 
-			for (int k = 0 ; k < nEch/3; k++) { 
+		for(int i = 0 ; i < this.informationRecue.nbElements() ; i++) { // parcourt le message binaire { true false..true true...}
+			/*
+			 * for (int k = 0 ; k < nEch/3; k++) { 
 				if(this.informationRecue.iemeElement(i)) {
 					informationAnalogique.add((float) 0); 
 				}
@@ -124,6 +134,29 @@ public class EmetteurAnalogique extends Transmetteur<Boolean, Float> {
 				if(this.informationRecue.iemeElement(i)) { 
 					informationAnalogique.add((float) 0);
 				}
+			}
+			*/
+			
+			for (int k = 0 ; k < nEch ; k++) { 
+				
+				// cette boucle permet d'approximer le signal numerique en analogique, pour une valeur binaire il y aura nEch echantillons
+				
+				if(this.informationRecue.iemeElement(i)) { 
+					if(k < nEch/3) {		
+					
+						// la methode RZ decompose le signal binaire en 3 partie, pour un bit 1, 2/3 de ses valeurs sont mises a 0, le tier restant prend la valeur max
+						// ici on regarde c'est trois intervalles, lorsque k est superieur au premiere tier a valeur 0, le second tier ou les valeurs prennent la valeur max
+						// le troisieme tier qui reprend les valeurs a 0.
+						
+						informationAnalogique.add((float) 0);
+					}
+					else if (k > nEch/3 && k < 2*nEch/3) {
+						informationAnalogique.add(max);
+					}
+					else if (k > 2*nEch/3) {
+						informationAnalogique.add((float) 0);
+					}
+				}else informationAnalogique.add((float) 0);
 			}
 		}
 	}

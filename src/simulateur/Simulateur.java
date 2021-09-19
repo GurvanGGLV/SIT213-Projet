@@ -13,11 +13,15 @@ import visualisations.SondeAnalogique;
 import visualisations.SondeLogique;
 
 
-/** La classe Simulateur permet de construire et simuler une cha�ne de
+/** 
+ * 
+ * La classe Simulateur permet de construire et simuler une cha�ne de
  * transmission compos�e d'une Source, d'un nombre variable de
  * Transmetteur(s) et d'une Destination.
  * @author cousin
  * @author prou
+ * 
+ * Etudiant : Christopher, Gurvan, Aurelien, Alexandre promotion FIP2023 FIP2A
  *
  */
 public class Simulateur {
