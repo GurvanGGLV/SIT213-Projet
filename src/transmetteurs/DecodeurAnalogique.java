@@ -76,6 +76,8 @@ public class DecodeurAnalogique extends Transmetteur<Float, Boolean>
 	
 	public void demodNRZ(int nEch, float max, float min) throws InformationNonConformeException
 	{
+		informationNumerique = new Information <Boolean> ();
+		
 		for (int i = 0 ; i < informationRecue.nbElements() ; i++)
 		{
             if(informationRecue.iemeElement(i) == max) 
@@ -91,46 +93,19 @@ public class DecodeurAnalogique extends Transmetteur<Float, Boolean>
 	
 	public void demodRZ(int nEch, float max, float min) throws InformationNonConformeException
 	{
-		//TODO
-	}
-	
-	
-	/**
-	 * Cette méthode permet de calculer pour true la valeur du pas
-	 * 
-	 * @param max  - valeur du maximum qu'atteindra la valeur float pour true
-	 * @param nEch - nombre d'échantillons du signal
-	 * @return - un float étant la valeur du pas
-	 */
-	public float calculPasPositif(int nEch, float max) {
-
-		float xA = 0;
-		float xB = (float) nEch / 3;
-		float yA = 0;
-		float yB = max;
-
-		float pas = (yB - yA) / (xB - xA);
-
-		return pas;
-	}
-
-	/**
-	 * Cette méthode permet de calculer pour true la valeur du pas
-	 * 
-	 * @param max  - valeur du maximum qu'atteindra la valeur float pour true
-	 * @param nEch - nombre d'échantillons du signal
-	 * @return - un float étant la valeur du pas
-	 */
-	public float calculPasNegatif(int nEch, float min) {
-
-		float xA = 0;
-		float xB = (float) nEch / 3;
-		float yA = 0;
-		float yB = min;
-
-		float pas = (yB - yA) / (xB - xA);
-
-		return pas;
+		informationNumerique = new Information <Boolean> ();
+		
+		for (int i = (nEch/3)-1; i<informationRecue.nbElements(); i=i+nEch)
+		{
+            if(informationRecue.iemeElement(i) == max) 
+            {
+                informationNumerique.add(true);
+            }
+            else 
+            {
+            	informationNumerique.add(false);
+            }
+        }
 	}
 
 }
