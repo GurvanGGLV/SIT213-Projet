@@ -58,32 +58,27 @@ public class DecodeurAnalogique extends Transmetteur<Float, Boolean>
 	{
 		informationNumerique = new Information <Boolean> ();
 		
-		float pasP = calculPasPositif(nEch, max);
-		float pasN = calculPasNegatif(nEch, min);
-		float dist = nEch / 3;
-		float init = 0;
-		
-		Iterator <Float> bitCourant = informationRecue.iterator();
-		
-		for (int i = 0; i < informationRecue.nbElements(); i++) 
+		for (int i = (nEch/3)-1; i<informationRecue.nbElements(); i=i+nEch)
 		{
-			init = init + dist;
-			if(bitCourant.next() == max)
-			{
-				for(int j = 0; j < nEch; j++)
-				{
-					informationNumerique.add(true);
-				}
-				
-			}
-			else
-			{
-				for(int j = 0; j < nEch; j++)
-				{
-					informationNumerique.add(false);
-				}
-			}
-		}
+            if(informationRecue.iemeElement(i) == max) 
+            {
+                informationNumerique.add(true);
+            }
+            else 
+            {
+        	informationNumerique.add(false);
+            }
+        }
+	}
+	
+	public void demodNRZ(int nEch, float max, float min) throws InformationNonConformeException
+	{
+		//TODO
+	}
+	
+	public void demodRZ(int nEch, float max, float min) throws InformationNonConformeException
+	{
+		//TODO
 	}
 	
 	
