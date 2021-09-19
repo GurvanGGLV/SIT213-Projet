@@ -5,6 +5,7 @@ import information.Information;
 import sources.Source;
 import sources.SourceAleatoire;
 import sources.SourceFixe;
+import transmetteurs.DecodeurAnalogique;
 import transmetteurs.EmetteurAnalogique;
 import transmetteurs.Transmetteur;
 import transmetteurs.TransmetteurParfait;
@@ -98,14 +99,15 @@ public class Simulateur {
       	// création d'un emetteur analogique si précisé en argument
       	if ( transAnalogique == true ) {
       		EmetteurAnalogique emetteurAnalogique = new EmetteurAnalogique(form, ne, min, max); 
+      		DecodeurAnalogique decodeurAnalogique = new DecodeurAnalogique(form, ne, min, max);
       		source.connecter(emetteurAnalogique);
+      		emetteurAnalogique.connecter(decodeurAnalogique);
       		if (affichage == true) {
     			Sonde<Float> sondeE = new SondeAnalogique("Sonde Analogique Entree");
     			Sonde<Boolean> sondeL = new SondeLogique("Sonde Logique", 10);
     			emetteurAnalogique.connecter(sondeE);
     			source.connecter(sondeL);
-    			//emetteurAnalogique.connecter(decodeurAnal);
-    			//decodeurAnal.connecter(destinationFinale);
+    			//decodeurAnalogique.connecter(destinationFinale);
     			// + faire une nouvelle sonde logique qui récupère le signal logique
       		}
       	}
