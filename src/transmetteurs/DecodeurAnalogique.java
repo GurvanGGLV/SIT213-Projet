@@ -24,14 +24,12 @@ public class DecodeurAnalogique extends Transmetteur<Float, Boolean>
 		this.max = max;
 		informationNumerique = null;	}
 	
-	@Override
 	public void recevoir(Information<Float> information) throws InformationNonConformeException 
 	{
 		this.informationRecue = information;
 		this.emettre();
 	}
 
-	@Override
 	public void emettre() throws InformationNonConformeException 
 	{
 		if (forme.equalsIgnoreCase("NRZT")) 
