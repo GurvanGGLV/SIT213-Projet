@@ -1,10 +1,19 @@
 package transmetteurs;
 
-// bonjour test 1
-
-// bonjour je suis le test 2
-
-// bonjour, je suis le test d'Aurélien
+/**
+ * Nom de classe 			: EmetteurAnalogique
+ * 
+ * Description 				: Cette classe se compose des methodes recevoir() et emettre() ainsi que 
+ * 							  des methodes de transmission de l'information. Elle a pour but de formater l'information numerique
+ * 							  en une information analogique.
+ * 
+ * Version 					: 1.0
+ * 
+ * Date 					: 19/09/2021
+ * 
+ * Copyright 				: Gurvan, Christopher, Alexandre, Aurelien Promotion 2023 FIP 2A
+ * 
+ */
 
 import java.util.Iterator;
 
@@ -63,7 +72,91 @@ public class EmetteurAnalogique extends Transmetteur<Boolean, Float> {
 		}
 		this.informationEmise = informationAnalogique;
 	}
-
+	
+	/**
+	 * La methode NRZ est un mode de transmission de l'information, elle permet 
+	 * de transmettre l'information numerique en analogique par la simulation d'un signal rectangulaire.
+	 * Les valeurs fixees des parametres permettent d'avoir un signal jonglant entre les negatifs <min> et les positifs <max>
+	 *  
+	 * @param nEch
+	 * @param max
+	 * @param min
+	 * @throws InformationNonConformeException
+	 * 
+	 */
+	
+	public void NRZ(int nEch, float max, float min) throws InformationNonConformeException {
+		
+		informationAnalogique = new Information<Float>();
+		
+		for(int i = 0 ; i < this.informationRecue.nbElements() ; i++) { // 1
+			for (int k = 0 ; k < nEch ; k++) { // 2
+				
+				// Les elements du message sont parcourus 1 a 1, chaque element est ensuite decompose en nEch nombre d'echantillon
+				// la boucle "1" parcourt le message binaire tandis que la boucle "2" recompose l'information logique en une multitude de points => approximation du signal analogique
+			
+				if(this.informationRecue.iemeElement(i)) {
+					informationAnalogique.add(max); 
+				}
+				else informationAnalogique.add(min); 
+			}
+		}	
+	}
+	
+	/**
+	 * La methode RZ est un mode de transmission de l'information, elle permet de transmettre
+	 * l'information numerique en analogique par la simulation d'un signal rectangulaire qui 
+	 * ne prendra ses valeurs qu'entre <max> et <0>.
+	 * 
+	 * @param nEch
+	 * @param max
+	 * @throws InformationNonConformeException
+	 * 
+	 */
+	
+	public void RZ(int nEch, float max) throws InformationNonConformeException {
+		
+		informationAnalogique = new Information<Float>();
+		
+		for(int i = 0 ; i < this.informationRecue.nbElements() ; i++) { // parcourt le message binaire { true false..true true...}
+			for (int k = 0 ; k < nEch ; k++) { 
+				
+				// cette boucle permet d'approximer le signal numerique en analogique, pour une valeur binaire il y aura nEch echantillons
+				
+				if(this.informationRecue.iemeElement(i)) { 
+					if(k < nEch/3) {		
+					
+						// la methode RZ decompose le signal binaire en 3 partie, pour un bit 1, 2/3 de ses valeurs sont mises a 0, le tier restant prend la valeur max
+						// ici on regarde c'est trois intervalles, lorsque k est superieur au premiere tier a valeur 0, le second tier ou les valeurs prennent la valeur max
+						// le troisieme tier qui reprend les valeurs a 0.
+						
+						informationAnalogique.add((float) 0);
+					}
+					else if (k > nEch/3 && k < 2*nEch/3) {
+						informationAnalogique.add(max);
+					}
+					else if (k > 2*nEch/3) {
+						informationAnalogique.add((float) 0);
+					}
+				}else informationAnalogique.add((float) 0);
+			}
+		}
+	}
+	
+	/**
+	 * La methode nRZT est un mode de transmission de l'information, elle permet de transmettre
+	 * l'information numerique en analogique par la simulation d'un signal rectangulaire qui 
+	 * ne prendra ses valeurs qu'entre <max> et <min> cependant, contrairement a la methode NRT, 
+	 * cette methode n'aura pas d'echelon lors des changements de valeurs. La transition entre la valeur <max> et <min>
+	 * se fera par un pas incremental.
+	 * 
+	 * @param nEch
+	 * @param max
+	 * @param min
+	 * @throws InformationNonConformeException
+	 * 
+	 */
+	
 	public void nRZT(int nEch, float max, float min) throws InformationNonConformeException {
 
 		informationAnalogique = new Information<Float>();
@@ -197,68 +290,6 @@ public class EmetteurAnalogique extends Transmetteur<Boolean, Float> {
 		}
 	}
 	
-public void NRZ(int nEch, float max, float min) throws InformationNonConformeException {
-		
-		informationAnalogique = new Information<Float>();
-		
-		for(int i = 0 ; i < this.informationRecue.nbElements() ; i++) { // 1
-			for (int k = 0 ; k < nEch ; k++) { // 2
-				
-				// Les elements du message sont parcourus 1 a 1, chaque element est ensuite decompose en nEch nombre d'echantillon
-				// la boucle "1" parcourt le message binaire tandis que la boucle "2" recompose l'information logique en une multitude de points => approximation du signal analogique
-			
-				if(this.informationRecue.iemeElement(i)) {
-					informationAnalogique.add(max); 
-				}
-				else informationAnalogique.add(min); 
-			}
-		}	
-	}
-	
-	/**
-	 * La methode RZ est un mode de transmission de l'information, elle permet de transmettre
-	 * l'information numerique en analogique par la simulation d'un signal rectangulaire qui 
-	 * ne prendra ses valeurs qu'entre <max> et <0>.
-	 * 
-	 * @param nEch
-	 * @param max
-	 * @throws InformationNonConformeException
-	 * 
-	 */
-	
-	public void RZ(int nEch, float max) throws InformationNonConformeException {
-		
-		informationAnalogique = new Information<Float>();
-		
-		for(int i = 0 ; i < this.informationRecue.nbElements() ; i++) 
-		{ // parcourt le message binaire { true false..true true...}
-						
-			for (int k = 0 ; k < nEch ; k++) 
-			{ // cette boucle permet d'approximer le signal numerique en analogique, pour une valeur binaire il y aura nEch echantillons
-				if(this.informationRecue.iemeElement(i)) 
-				{ 
-					if(k < nEch/3) 
-					{		
-					
-						// la methode RZ decompose le signal binaire en 3 partie, pour un bit 1, 2/3 de ses valeurs sont mises a 0, le tier restant prend la valeur max
-						// ici on regarde c'est trois intervalles, lorsque k est superieur au premiere tier a valeur 0, le second tier ou les valeurs prennent la valeur max
-						// le troisieme tier qui reprend les valeurs a 0.
-						
-						informationAnalogique.add((float) 0);
-					}
-					else if (k > nEch/3 && k < 2*nEch/3) 
-					{
-						informationAnalogique.add(max);
-					}
-					else if (k > 2*nEch/3) 
-					{
-						informationAnalogique.add((float) 0);
-					}
-				}
-				else informationAnalogique.add((float) 0);
-			}
-		}
-	}
 
 	/**
 	 * Cette méthode permet de calculer pour true la valeur du pas
