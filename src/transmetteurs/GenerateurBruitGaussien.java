@@ -29,6 +29,8 @@ public class GenerateurBruitGaussien extends Transmetteur<Float,Float>{
 
 	public void emettre() throws InformationNonConformeException {
 		
+		informationBruitee = new Information<Float>();
+		
 		float sigma = calculSigma();
 		float bruit;
 		
@@ -82,7 +84,7 @@ public class GenerateurBruitGaussien extends Transmetteur<Float,Float>{
 		// on récupère la puissance moyenne du signal
 		float ps = calculPuissance(informationRecue);
 		
-		// on passe en log le snr
+		// on passe en log le snr pour effectuer le calcul
 		float logSnr = (float)Math.pow(10, snr/10);
 		
 		sigma = (float)Math.sqrt((ps*nbEch)/(2*logSnr));
