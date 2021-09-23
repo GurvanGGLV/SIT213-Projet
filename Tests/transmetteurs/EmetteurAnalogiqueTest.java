@@ -50,6 +50,6 @@ public class EmetteurAnalogiqueTest
 	public void testCalculPasNegatif()
 	{
 		collector.checkThat("Test de calculPasNegatif 1", emetteur1.calculPasNegatif(emetteur1.getnEch(), emetteur1.getMin()), is(-0.3F));
-		collector.checkThat("Test de calculPasNegatif 2", emetteur1.calculPasNegatif(emetteur1.getnEch(), emetteur2.getMin()), is(-0.12F));
+		collector.checkThat("Test de calculPasNegatif 2", emetteur1.calculPasNegatif(emetteur1.getnEch(), emetteur2.getMin()), is(-0.120000005F));
 	}
 }
