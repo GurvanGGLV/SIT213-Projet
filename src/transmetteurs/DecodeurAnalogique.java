@@ -16,6 +16,8 @@ public class DecodeurAnalogique extends Transmetteur<Float, Boolean>
 	private float max;
 	protected Information<Boolean> informationNumerique;
 	
+	double esperance = (max + min)/2;
+	
 	public DecodeurAnalogique(String forme, int nEch, float min, float max) 
 	{
 		
@@ -43,12 +45,12 @@ public class DecodeurAnalogique extends Transmetteur<Float, Boolean>
 		
 		if(forme.equalsIgnoreCase("NRZ")) 
 		{
-			demodNRZ(nEch, max, min);
+			demodNRZT(nEch, max, min);
 		}
 		
 		if(forme.equalsIgnoreCase("RZ")) 
 		{
-			demodRZ(nEch, max, min);
+			demodNRZT(nEch, max, min);
 		}
 		
 		for (DestinationInterface <Boolean> destinationConnectee : destinationsConnectees) {
@@ -62,17 +64,62 @@ public class DecodeurAnalogique extends Transmetteur<Float, Boolean>
 	{
 		informationNumerique = new Information <Boolean> ();
 		
-		for (int i = (nEch/3); i<informationRecue.nbElements(); i=i+nEch)
+		int nBits = informationRecue.nbElements()/nEch;
+		double somme = 0;
+		int i = 0;
+		int j = 0;
+		
+		for (double echantillon : informationRecue)
 		{
-            if(informationRecue.iemeElement(i) == max) 
-            {
-                informationNumerique.add(true);
-            }
-            else
-            {
-            	informationNumerique.add(false);
-            }
-        }
+			j++;
+			
+			if (i == 0)
+			{
+				if (j > (nEch/3))
+					somme += echantillon;
+			}
+			
+			else if (i == nBits-1)
+			{
+				if (j < (2*nEch/3))
+						somme += echantillon;
+			}
+			
+			else
+				somme += echantillon;
+			
+			if (j == nEch)
+			{
+				if (i==0)
+				{
+					if (somme / (2*nEch/3) > esperance)
+						informationNumerique.add(true);
+					else
+						informationNumerique.add(false);
+				}
+				
+				else if (i == nBits-1)
+				{
+					if (somme / (2*nEch/3) > esperance)
+						informationNumerique.add(true);
+					else
+						informationNumerique.add(false);
+				}
+				
+				else if (somme/nEch > esperance)
+					informationNumerique.add(true);
+				
+				else
+					informationNumerique.add(false);
+
+				j = 0;
+				i++;
+				somme = 0;
+			}
+			
+			
+		}
+		
 	}
 	
 	public void demodNRZ(int nEch, float max, float min) throws InformationNonConformeException

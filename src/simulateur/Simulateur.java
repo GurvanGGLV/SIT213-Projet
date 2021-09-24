@@ -362,7 +362,7 @@ public class Simulateur {
 			for (int i = 0; i < args.length; i++) { // copier tous les param�tres de simulation
 				s += args[i] + "  ";
 			}
-			System.out.println(s + "  =>   TEB : " + simulateur.calculTauxErreurBinaire());
+			//System.out.println(s + "  =>   TEB : " + simulateur.calculTauxErreurBinaire());
 		} catch (Exception e) {
 			System.out.println(e);
 			e.printStackTrace();
