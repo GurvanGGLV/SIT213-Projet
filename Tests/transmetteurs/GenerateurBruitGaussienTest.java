@@ -20,7 +20,7 @@ import static org.hamcrest.CoreMatchers.is;
 
 public class GenerateurBruitGaussienTest 
 {
-	private SourceAleatoire source = null;
+	private SourceFixe source = null;
 	private EmetteurAnalogique emetteurAnalogique;
 	private GenerateurBruitGaussien bruit1;
 	private GenerateurBruitGaussien bruit2;
@@ -41,7 +41,7 @@ public class GenerateurBruitGaussienTest
 	@Before
 	public void setUp()
 	{
-		source = new SourceAleatoire("100", null);
+		source = new SourceFixe("00101110100011011001110101000110");
 		
 		emetteurAnalogique = new EmetteurAnalogique("NRZT", 50, -5, 5);
 		
@@ -81,7 +81,7 @@ public class GenerateurBruitGaussienTest
 	 */
 	@Test
 	public void testCalculBruit()
-	{
+	{	
 		collector.checkThat("Test de calculBruit 1", bruit1.calculBruit(3), is(0.0F));
 		collector.checkThat("Test de calculBruit 2", bruit2.calculBruit(5), is(0.0F));
 	}
