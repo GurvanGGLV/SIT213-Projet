@@ -9,16 +9,25 @@ import org.junit.Test;
 import org.junit.Rule;
 import org.junit.rules.ErrorCollector;
 
-import information.Information;
+import information.*;
+import simulateur.*;
+import sources.*;
+import transmetteurs.EmetteurAnalogique;
+import transmetteurs.GenerateurBruitGaussien;
+import destinations.*;
 
 import static org.hamcrest.CoreMatchers.is;
 
 public class GenerateurBruitGaussienTest 
 {
+	private SourceAleatoire source = null;
+	private EmetteurAnalogique emetteurAnalogique;
 	private GenerateurBruitGaussien bruit1;
 	private GenerateurBruitGaussien bruit2;
-	private Information<Float> informationAnalogique1 = bruit1.getInformationRecue();
-	private Information<Float> informationAnalogique2 = bruit2.getInformationRecue();
+	private Information<Float> informationAnalogique1;
+	private Information<Float> informationAnalogique2;
+	
+	
 	
 	@Rule
 	public ErrorCollector collector = new ErrorCollector();
@@ -32,8 +41,23 @@ public class GenerateurBruitGaussienTest
 	@Before
 	public void setUp()
 	{
+		source = new SourceAleatoire("100", null);
+		
+		emetteurAnalogique = new EmetteurAnalogique("NRZT", 50, -5, 5);
+		
 		bruit1 = new GenerateurBruitGaussien(2, 30);
 		bruit2 = new GenerateurBruitGaussien(3, 50);
+		
+		source.connecter(emetteurAnalogique);
+		emetteurAnalogique.connecter(bruit1);
+		emetteurAnalogique.connecter(bruit2);
+		
+		try {
+			source.emettre();
+		} catch (InformationNonConformeException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	@After
@@ -45,6 +69,9 @@ public class GenerateurBruitGaussienTest
 	@Test
 	public void testCalculPuissance()
 	{
+		informationAnalogique1 = bruit1.informationRecue;
+		informationAnalogique2 = bruit2.informationRecue;
+		
 		collector.checkThat("Test de calculPuissance 1", bruit1.calculPuissance(informationAnalogique1), is(0.0F));
 		collector.checkThat("Test de calculPuissance 2", bruit2.calculPuissance(informationAnalogique2), is(0.0F));
 	}
@@ -59,9 +86,10 @@ public class GenerateurBruitGaussienTest
 		collector.checkThat("Test de calculBruit 2", bruit2.calculBruit(5), is(0.0F));
 	}
 	
+	@Test
 	public void testCalculSigma()
 	{
 		collector.checkThat("Test de calculBruit 1", bruit1.calculSigma(), is(0.0F));
-		collector.checkThat("Test de calculBruit 1", bruit2.calculSigma(), is(0.0F));
+		collector.checkThat("Test de calculBruit 2", bruit2.calculSigma(), is(0.0F));
 	}
 }

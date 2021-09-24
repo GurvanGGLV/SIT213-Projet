@@ -8,6 +8,9 @@ import org.junit.Test;
 
 import org.junit.Rule;
 import org.junit.rules.ErrorCollector;
+
+import transmetteurs.EmetteurAnalogique;
+
 import static org.hamcrest.CoreMatchers.is;
 
 public class EmetteurAnalogiqueTest 
