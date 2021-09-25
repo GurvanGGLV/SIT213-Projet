@@ -17,6 +17,9 @@ public class DecodeurAnalogique extends Transmetteur<Float, Boolean>
 	protected Information<Boolean> informationNumerique;
 	
 	double esperance = (max + min)/2;
+	double somme = 0;
+	int i = 0;
+	int j = 0;
 	
 	public DecodeurAnalogique(String forme, int nEch, float min, float max) 
 	{
@@ -50,7 +53,7 @@ public class DecodeurAnalogique extends Transmetteur<Float, Boolean>
 		
 		if(forme.equalsIgnoreCase("RZ")) 
 		{
-			demodNRZT(nEch, max, min);
+			demodRZ(nEch, max, min);
 		}
 		
 		for (DestinationInterface <Boolean> destinationConnectee : destinationsConnectees) {
@@ -63,30 +66,13 @@ public class DecodeurAnalogique extends Transmetteur<Float, Boolean>
 	public void demodNRZT(int nEch, float max, float min) throws InformationNonConformeException 
 	{
 		informationNumerique = new Information <Boolean> ();
-		
 		int nBits = informationRecue.nbElements()/nEch;
-		double somme = 0;
-		int i = 0;
-		int j = 0;
+		
 		
 		for (double echantillon : informationRecue)
 		{
 			j++;
-			
-			if (i == 0)
-			{
-				if (j > (nEch/3))
-					somme += echantillon;
-			}
-			
-			else if (i == nBits-1)
-			{
-				if (j < (2*nEch/3))
-						somme += echantillon;
-			}
-			
-			else
-				somme += echantillon;
+			somme += echantillon;
 			
 			if (j == nEch)
 			{
@@ -117,12 +103,11 @@ public class DecodeurAnalogique extends Transmetteur<Float, Boolean>
 				somme = 0;
 			}
 			
-			
 		}
 		
 	}
 	
-	public void demodNRZ(int nEch, float max, float min) throws InformationNonConformeException
+	/*public void demodNRZ(int nEch, float max, float min) throws InformationNonConformeException
 	{
 		informationNumerique = new Information <Boolean> ();
 		
@@ -137,23 +122,28 @@ public class DecodeurAnalogique extends Transmetteur<Float, Boolean>
             	informationNumerique.add(false);
             }
         }
-	}
+	}*/
 	
 	public void demodRZ(int nEch, float max, float min) throws InformationNonConformeException
 	{
 		informationNumerique = new Information <Boolean> ();
-		
-		for (int i = (nEch/3); i<informationRecue.nbElements(); i=i+(nEch))
+
+		for (double echantillon : informationRecue)
 		{
-            if(informationRecue.iemeElement(i) == max) 
-            {
-                informationNumerique.add(true);
-            }
-            else
-            {
-            	informationNumerique.add(false);
-            }
-        }
+            j++;
+            somme += echantillon;
+			
+			if (j == nEch)
+			{
+	            if(somme / nEch > esperance)
+					informationNumerique.add(true);
+	            else
+					informationNumerique.add(false);
+	            
+	            j = 0;
+	            somme = 0;
+	        }
+		}
 	}
 
 }
