@@ -31,10 +31,10 @@ public class DecodeurAnalogique extends Transmetteur<Float, Boolean>
 	private float max;
 	protected Information<Boolean> informationNumerique;
 	
-	double esperance = (max + min)/2;
-	double somme = 0;
-	int i = 0;
-	int j = 0;
+	private double esperance = (max + min)/2;
+	private double somme = 0;
+	private int i = 0;
+	private int j = 0;
 	
 	public DecodeurAnalogique(String forme, int nEch, float min, float max) 
 	{
@@ -91,8 +91,8 @@ public class DecodeurAnalogique extends Transmetteur<Float, Boolean>
 	public void demodNRZT(int nEch) throws InformationNonConformeException 
 	{
 		informationNumerique = new Information <Boolean> ();
-		int nBits = informationRecue.nbElements()/nEch;
 		
+		int nBits = informationRecue.nbElements()/nEch;
 		
 		for (double echantillon : informationRecue)
 		{

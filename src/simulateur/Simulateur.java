@@ -320,7 +320,7 @@ public class Simulateur {
 
 		// r�ception
 		Information<Boolean> signalRecu = destination.getInformationRecue();
-
+		
 		// calcul
 		Information<Boolean> signalEmis = source.getInformationEmise();
 		int longueurEmission = signalEmis.nbElements();
