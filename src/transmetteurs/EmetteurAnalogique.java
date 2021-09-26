@@ -462,4 +462,16 @@ public class EmetteurAnalogique extends Transmetteur<Boolean, Float> {
 		return pas;
 	}
 
+	public int getnEch() {
+		return nEch;
+	}
+
+	public float getMin() {
+		return min;
+	}
+
+	public float getMax() {
+		return max;
+	}
+
 }
