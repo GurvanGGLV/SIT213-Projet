@@ -33,8 +33,8 @@ public class DecodeurAnalogique extends Transmetteur<Float, Boolean>
 	
 	private double esperance = (max + min)/2;
 	private double somme = 0;
-	private int i = 0;
-	private int j = 0;
+	private int compteurEch = 0;
+	//private int i = 0;
 	
 	public DecodeurAnalogique(String forme, int nEch, float min, float max) 
 	{
@@ -54,20 +54,14 @@ public class DecodeurAnalogique extends Transmetteur<Float, Boolean>
 
 	public void emettre() throws InformationNonConformeException 
 	{
-		if (forme.equalsIgnoreCase("NRZT")) 
+		if (forme.equalsIgnoreCase("NRZT") || forme.equalsIgnoreCase("NRZ")) 
 		{
-			demodNRZT(nEch);
-		} // continuer pour les autres encodages
-
-		
-		if(forme.equalsIgnoreCase("NRZ")) 
-		{
-			demodNRZ(nEch);
+			decodeur(nEch);
 		}
-		
+	
 		if(forme.equalsIgnoreCase("RZ")) 
 		{
-			demodRZ(nEch, max);
+			decodRZ(nEch, max);
 		}
 		
 		for (DestinationInterface <Boolean> destinationConnectee : destinationsConnectees) {
@@ -79,7 +73,7 @@ public class DecodeurAnalogique extends Transmetteur<Float, Boolean>
 	
 	
 	/**
-	 * La methode demodNRZT permet de décoder l'information analogique reçue et codée par le code en ligne NRZT. 
+	 * La methode demodNRZT permet de décoder l'information analogique reçue et codée par le code en ligne NRZT ou NRZ (No Return to Zero). 
 	 * Pour cela, on fixe un seuil à la valeur (max + min)/2 puis on calcule la valeur moyenne de chaque bit reçu. Si celle-ci est
 	 * au dessus du seuil, le bit reçu est 1, sinon c'est un 0.
 	 *  
@@ -88,89 +82,30 @@ public class DecodeurAnalogique extends Transmetteur<Float, Boolean>
 	 * 
 	 */
 	
-	public void demodNRZT(int nEch) throws InformationNonConformeException 
+	public void decodeur(int nEch) throws InformationNonConformeException 
 	{
 		informationNumerique = new Information <Boolean> ();
 		
-		int nBits = informationRecue.nbElements()/nEch;
-		
 		for (double echantillon : informationRecue)
 		{
-			j++;
+			compteurEch++;
 			somme += echantillon;
 			
-			if (j == nEch)
-			{
-				if (i==0)
-				{
-					if (somme / (2*nEch/3) > esperance)
-						informationNumerique.add(true);
-					else
-						informationNumerique.add(false);
-				}
-				
-				else if (i == nBits-1)
-				{
-					if (somme / (2*nEch/3) > esperance)
-						informationNumerique.add(true);
-					else
-						informationNumerique.add(false);
-				}
-				
-				else if (somme/nEch > esperance)
-					informationNumerique.add(true);
-				
-				else
-					informationNumerique.add(false);
-
-				j = 0;
-				i++;
-				somme = 0;
-			}
-			
-		}
-		
-	}
-	
-	
-	/**
-	 * La methode demodNRZ permet de décoder l'information analogique reçue et codée par le code en ligne NRZ (No Return to Zero). 
-	 * Pour cela, on fixe un seuil à la valeur (max + min)/2 puis on calcule la valeur moyenne de chaque bit reçu. Si celle-ci est
-	 * au dessus du seuil, le bit reçu est 1, sinon c'est un 0.
-	 *  
-	 * @param nEch
-	 * @throws InformationNonConformeException
-	 * 
-	 */
-	
-	public void demodNRZ(int nEch) throws InformationNonConformeException 
-	{
-		informationNumerique = new Information <Boolean> ();
-		int nBits = informationRecue.nbElements()/nEch;
-		
-		
-		for (double echantillon : informationRecue)
-		{
-			j++;
-			somme += echantillon;
-			
-			if (j == nEch)
-			{
+			if (compteurEch == nEch)
+			{	
 				if (somme/nEch > esperance)
 					informationNumerique.add(true);
 				
 				else
 					informationNumerique.add(false);
 
-				j = 0;
-				i++;
+				compteurEch = 0;
 				somme = 0;
 			}
 			
 		}
 		
 	}
-	
 	
 	/**
 	 * La methode demodRZ permet de décoder l'information analogique reçue et codée par le code en ligne RZ (Return to Zero). 
@@ -183,23 +118,23 @@ public class DecodeurAnalogique extends Transmetteur<Float, Boolean>
 	 * 
 	 */
 	
-	public void demodRZ(int nEch, float max) throws InformationNonConformeException
+	public void decodRZ(int nEch, float max) throws InformationNonConformeException
 	{
 		informationNumerique = new Information <Boolean> ();
 
 		for (double echantillon : informationRecue)
 		{
-            j++;
+			compteurEch++;
             somme += echantillon;
 			
-			if (j == nEch)
+			if (compteurEch == nEch)
 			{
 	            if(somme / nEch > (int)max/3)
 					informationNumerique.add(true);
 	            else
 					informationNumerique.add(false);
 	            
-	            j = 0;
+	            compteurEch = 0;
 	            somme = 0;
 	        }
 		}
