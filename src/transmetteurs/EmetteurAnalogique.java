@@ -60,7 +60,7 @@ public class EmetteurAnalogique extends Transmetteur<Boolean, Float> {
 		} // continuer pour les autres encodages
 		
 		// DEBUG
-		int size = informationAnalogique.nbElements();
+		//int size = informationAnalogique.nbElements();
 		
 		if(forme.equalsIgnoreCase("NRZ")) {
 			NRZ(nEch, max, min);
