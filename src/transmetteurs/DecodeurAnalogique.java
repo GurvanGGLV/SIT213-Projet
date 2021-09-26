@@ -1,5 +1,20 @@
 package transmetteurs;
 
+/**
+ * Nom de classe 			: DecodeurAnalogique
+ * 
+ * Description 				: Cette classe se compose des methodes recevoir() et emettre() ainsi que 
+ * 							  des methodes de transmission de l'information. Elle a pour but de reconstituer l'information numerique
+ * 							  à partir de l'information analogique reçue (bruitee ou non).
+ * 
+ * Version 					: 2.0
+ * 
+ * Date 					: 24/09/2021
+ * 
+ * Copyright 				: Gurvan, Christopher, Alexandre, Aurelien Promotion 2023 FIP 2A
+ * 
+ */
+
 import java.util.Iterator;
 
 import destinations.DestinationInterface;
@@ -23,7 +38,6 @@ public class DecodeurAnalogique extends Transmetteur<Float, Boolean>
 	
 	public DecodeurAnalogique(String forme, int nEch, float min, float max) 
 	{
-		
 		super();
 		
 		this.forme = forme;
@@ -42,18 +56,18 @@ public class DecodeurAnalogique extends Transmetteur<Float, Boolean>
 	{
 		if (forme.equalsIgnoreCase("NRZT")) 
 		{
-			demodNRZT(nEch, max, min);
+			demodNRZT(nEch);
 		} // continuer pour les autres encodages
 
 		
 		if(forme.equalsIgnoreCase("NRZ")) 
 		{
-			demodNRZT(nEch, max, min);
+			demodNRZ(nEch);
 		}
 		
 		if(forme.equalsIgnoreCase("RZ")) 
 		{
-			demodRZ(nEch, max, min);
+			demodRZ(nEch, max);
 		}
 		
 		for (DestinationInterface <Boolean> destinationConnectee : destinationsConnectees) {
@@ -63,7 +77,18 @@ public class DecodeurAnalogique extends Transmetteur<Float, Boolean>
 		
 	}
 	
-	public void demodNRZT(int nEch, float max, float min) throws InformationNonConformeException 
+	
+	/**
+	 * La methode demodNRZT permet de décoder l'information analogique reçue et codée par le code en ligne NRZT. 
+	 * Pour cela, on fixe un seuil à la valeur (max + min)/2 puis on calcule la valeur moyenne de chaque bit reçu. Si celle-ci est
+	 * au dessus du seuil, le bit reçu est 1, sinon c'est un 0.
+	 *  
+	 * @param nEch
+	 * @throws InformationNonConformeException
+	 * 
+	 */
+	
+	public void demodNRZT(int nEch) throws InformationNonConformeException 
 	{
 		informationNumerique = new Information <Boolean> ();
 		int nBits = informationRecue.nbElements()/nEch;
@@ -107,7 +132,58 @@ public class DecodeurAnalogique extends Transmetteur<Float, Boolean>
 		
 	}
 	
-	public void demodRZ(int nEch, float max, float min) throws InformationNonConformeException
+	
+	/**
+	 * La methode demodNRZ permet de décoder l'information analogique reçue et codée par le code en ligne NRZ (No Return to Zero). 
+	 * Pour cela, on fixe un seuil à la valeur (max + min)/2 puis on calcule la valeur moyenne de chaque bit reçu. Si celle-ci est
+	 * au dessus du seuil, le bit reçu est 1, sinon c'est un 0.
+	 *  
+	 * @param nEch
+	 * @throws InformationNonConformeException
+	 * 
+	 */
+	
+	public void demodNRZ(int nEch) throws InformationNonConformeException 
+	{
+		informationNumerique = new Information <Boolean> ();
+		int nBits = informationRecue.nbElements()/nEch;
+		
+		
+		for (double echantillon : informationRecue)
+		{
+			j++;
+			somme += echantillon;
+			
+			if (j == nEch)
+			{
+				if (somme/nEch > esperance)
+					informationNumerique.add(true);
+				
+				else
+					informationNumerique.add(false);
+
+				j = 0;
+				i++;
+				somme = 0;
+			}
+			
+		}
+		
+	}
+	
+	
+	/**
+	 * La methode demodRZ permet de décoder l'information analogique reçue et codée par le code en ligne RZ (Return to Zero). 
+	 * Pour cela, on fixe un seuil à la valeur max/3 puis on calcule la valeur moyenne de chaque bit reçu. Si celle-ci est
+	 * au dessus du seuil, le bit reçu est 1, sinon c'est un 0.
+	 *  
+	 * @param nEch
+	 * @param max
+	 * @throws InformationNonConformeException
+	 * 
+	 */
+	
+	public void demodRZ(int nEch, float max) throws InformationNonConformeException
 	{
 		informationNumerique = new Information <Boolean> ();
 
