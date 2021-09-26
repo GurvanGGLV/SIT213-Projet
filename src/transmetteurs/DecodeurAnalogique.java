@@ -73,7 +73,7 @@ public class DecodeurAnalogique extends Transmetteur<Float, Boolean>
 	
 	
 	/**
-	 * La methode demodNRZT permet de décoder l'information analogique reçue et codée par le code en ligne NRZT ou NRZ (No Return to Zero). 
+	 * La methode decodeur permet de décoder l'information analogique reçue et codée par le code en ligne NRZT ou NRZ (No Return to Zero). 
 	 * Pour cela, on fixe un seuil à la valeur (max + min)/2 puis on calcule la valeur moyenne de chaque bit reçu. Si celle-ci est
 	 * au dessus du seuil, le bit reçu est 1, sinon c'est un 0.
 	 *  
@@ -108,7 +108,7 @@ public class DecodeurAnalogique extends Transmetteur<Float, Boolean>
 	}
 	
 	/**
-	 * La methode demodRZ permet de décoder l'information analogique reçue et codée par le code en ligne RZ (Return to Zero). 
+	 * La methode decodRZ permet de décoder l'information analogique reçue et codée par le code en ligne RZ (Return to Zero). 
 	 * Pour cela, on fixe un seuil à la valeur max/3 puis on calcule la valeur moyenne de chaque bit reçu. Si celle-ci est
 	 * au dessus du seuil, le bit reçu est 1, sinon c'est un 0.
 	 *  
