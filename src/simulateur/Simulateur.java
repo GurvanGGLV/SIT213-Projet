@@ -133,16 +133,14 @@ public class Simulateur {
 				source.connecter(emetteurAnalogique);
 				emetteurAnalogique.connecter(generateurBruit);
 				generateurBruit.connecter(decodeurAnalogique);
-				decodeurAnalogique.connecter(transmetteurLogique);
-				transmetteurLogique.connecter(destination);
-
+				decodeurAnalogique.connecter(destination);
+				
 				// sondes
 				if (affichage == true) {
 
 					// Création des sondes
 					Sonde<Boolean> sondeL = new SondeLogique("Signal Source", 10);
 					Sonde<Float> sondeE = new SondeAnalogique("Signal Analogique Entree");
-					Sonde<Boolean> sondeLS = new SondeLogique("Signal Source Final", 10);
 					Sonde<Float> sondeB = new SondeAnalogique("Signal Bruité");
 					Sonde<Boolean> sondeC = new SondeLogique("Signal Sortie Décodeur", 10);
 
@@ -151,7 +149,6 @@ public class Simulateur {
 					emetteurAnalogique.connecter(sondeE);
 					generateurBruit.connecter(sondeB);
 					decodeurAnalogique.connecter(sondeC);
-					transmetteurLogique.connecter(sondeLS);
 				}
 
 			} else {
@@ -334,6 +331,7 @@ public class Simulateur {
 				nbErreurs += 1;
 			}
 		}
+		
 		float teb = ((float) nbErreurs / (float) longueurEmission) * 100;
 		return teb;
 	}
@@ -362,7 +360,7 @@ public class Simulateur {
 			for (int i = 0; i < args.length; i++) { // copier tous les param�tres de simulation
 				s += args[i] + "  ";
 			}
-			//System.out.println(s + "  =>   TEB : " + simulateur.calculTauxErreurBinaire());
+			//System.out.println(s +  "  =>   TEB : " + simulateur.calculTauxErreurBinaire());
 		} catch (Exception e) {
 			System.out.println(e);
 			e.printStackTrace();
