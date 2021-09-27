@@ -332,7 +332,7 @@ public class Simulateur {
 			}
 		}
 		
-		float teb = ((float) nbErreurs / (float) longueurEmission) * 100;
+		float teb = ((float) nbErreurs / (float) longueurEmission);
 		return teb;
 	}
 

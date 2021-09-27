@@ -121,27 +121,25 @@ public class EmetteurAnalogique extends Transmetteur<Boolean, Float> {
 		
 		informationAnalogique = new Information<Float>();
 		
-		for(int i = 0 ; i < this.informationRecue.nbElements() ; i++) { // parcourt le message binaire { true false..true true...}
-			for (int k = 0 ; k < nEch ; k++) { 
-				
-				// cette boucle permet d'approximer le signal numerique en analogique, pour une valeur binaire il y aura nEch echantillons
-				
-				if(this.informationRecue.iemeElement(i)) { 
-					if(k < nEch/3) {		
-					
-						// la methode RZ decompose le signal binaire en 3 partie, pour un bit 1, 2/3 de ses valeurs sont mises a 0, le tier restant prend la valeur max
-						// ici on regarde c'est trois intervalles, lorsque k est superieur au premiere tier a valeur 0, le second tier ou les valeurs prennent la valeur max
-						// le troisieme tier qui reprend les valeurs a 0.
-						
-						informationAnalogique.add((float) 0);
+		float dist = (float)nEch/(float)3;
+	
+		for(boolean bitCourant : informationRecue) { // on regarde chaque bit
+			if(bitCourant == true) { // si c'est un true
+				for(int j=0 ; j<dist ; j++) { // 1/3 tbit à 0
+					informationAnalogique.add(0f);
+				}
+				for(int j=0 ; j<dist ; j++) { // 1/3 tbit à max
+					informationAnalogique.add(max);
+				}
+				for(int j=0 ; j<dist ; j++) { // 1/3 tbit à 0
+					informationAnalogique.add(0f);
+				}
+			} else { // sinon tout à 0
+				for(int tBit=0 ; tBit<3 ; tBit++) {
+					for(int j=0 ; j<dist ; j++) {
+						informationAnalogique.add(0f);
 					}
-					else if (k > nEch/3 && k < 2*nEch/3) {
-						informationAnalogique.add(max);
-					}
-					else if (k > 2*nEch/3) {
-						informationAnalogique.add((float) 0);
-					}
-				} else informationAnalogique.add((float) 0);
+				}
 			}
 		}
 	}
@@ -167,134 +165,10 @@ public class EmetteurAnalogique extends Transmetteur<Boolean, Float> {
 		// définition des valeurs de pas
 		float pasP = calculPasPositif(nEch, max);
 		float pasN = calculPasNegatif(nEch, min);
-		float dist = nEch / 3;
+		double dist = (float)nEch / 3.0f;
 
 		Iterator<Boolean> bitCourant = informationRecue.iterator();
 
-		/*
-		for (int i = 0; i < informationRecue.nbElements(); i++) {
-
-			// on prend le cas où il n'y a qu'un bit
-			if (informationRecue.nbElements() == 1) {
-				// on regarde la valeur du bit
-				if (bitCourant.next() == true) {
-					float init = 0;
-					for (int j = 0; j < dist; j++) {
-						informationAnalogique.add(init);
-						System.out.println(init);
-						init += pasP;
-					}
-					for (int j = 0; j < dist; j++) {
-						informationAnalogique.add(max);
-					}
-					for (int j = 0; j < dist; j++) {
-						init -= pasP;
-						informationAnalogique.add(init);
-					}
-				} else if (bitCourant.next() == false) {
-					float init = 0;
-					for (int j = 0; j < dist; j++) {
-						informationAnalogique.add(init);
-						init += pasN;
-					}
-					for (int j = 0; j < dist; j++) {
-						informationAnalogique.add(min);
-					}
-					for (int j = 0; j < dist; j++) {
-						init -= pasN;
-						informationAnalogique.add(init);
-					}
-				}
-			}
-
-			// sinon on traite différemment la liste
-			else {
-				int bitPrec = i - 1;
-				if (i == 0) {
-					if (informationRecue.iemeElement(i)) { // réception d'un bit positif
-						float init = 0;
-						for (int j = 0; j < dist; j++) { // montée
-							informationAnalogique.add(init);
-							init += pasP;
-						}
-						for (int j = 0; j < dist; j++) { // valeur max 1/3 tbit
-							informationAnalogique.add(max);
-						}
-
-					} else if (informationRecue.iemeElement(i) == false) { // réception d'un bit négatif
-						float init = 0;
-						for (int j = 0; j < dist; j++) { // on passe de 0 à min
-							informationAnalogique.add(init);
-							init += pasN;
-						}
-						for (int j = 0; j < dist; j++) { // plafond à min
-							informationAnalogique.add(init);
-						}
-					}
-				} else if (i != 0) { // si on est entre le début et la fin (-1?)
-					if (informationRecue.iemeElement(i)) { // on reçoit un bit positif
-						if (informationRecue.iemeElement(bitPrec) == informationRecue.iemeElement(i)) { // si le bit
-																										// d'avant était
-																										// positif
-																										// également
-							for (int j = 0; j < dist; j++) { // on laisse 3 paliers de max
-								informationAnalogique.add(max);
-							}
-							for (int j = 0; j < dist; j++) { // 2/3
-								informationAnalogique.add(max);
-							}
-							for (int j = 0; j < dist; j++) { // 3/3
-								informationAnalogique.add(max);
-							}
-						} else if (informationRecue.iemeElement(bitPrec) == false) { // si le bit précédent était
-																						// négatif
-							float init = min; // on se place à min
-							for (int j = 0; j < dist; j++) { // on remonte la pente sur 1/3 tBit
-								init -= pasN;
-								informationAnalogique.add(init);
-							}
-							init = 0; // on se place à 0
-							for (int j = 0; j < dist; j++) { // on monte jusqu'à max sur 1/3 tBit
-								init += pasP;
-								informationAnalogique.add(init);
-							}
-							for (int j = 0; j < dist; j++) { // on reste 1/3 tBit à max
-								informationAnalogique.add(max);
-							}
-						}
-					} else if (informationRecue.iemeElement(i) == false) { // si l'on reçoit un bit 0
-						if (informationRecue.iemeElement(bitPrec) == false) { // et que le précédent était 0 aussi
-							for (int j = 0; j < (dist); j++) { // on reste à min 1/3
-								informationAnalogique.add(min);
-							}
-							for (int j = 0; j < dist; j++) { // 2/3
-								informationAnalogique.add(min);
-							}
-							for (int j = 0; j < dist; j++) { // 3/3
-								informationAnalogique.add(min);
-							}
-						} else if (informationRecue.iemeElement(bitPrec) == true) { // si le précédent était un 1
-							float init = max;
-							for (int j = 0; j < dist; j++) { // on redescend jusq'à 0
-								informationAnalogique.add(init);
-								init -= pasP;
-							}
-							// init=0; // on se place bien à 0
-							for (int j = 0; j < dist; j++) { // on descend jusqu'à min 1/3 tBit
-								init += pasN;
-								informationAnalogique.add(init);
-							}
-							for (int j = 0; j < dist; j++) {
-								informationAnalogique.add(init); // on reste ensuite à min pendant 1/3 tBit
-							}
-						}
-					}
-				}
-			}
-		}
-		int size = informationAnalogique.nbElements();
-		System.out.println(size);
-		*/
 		// codage avec for each
 		int position = 0; // sert à savoir où l'on est dans informationRecue
 		for (boolean b : informationRecue) {
@@ -413,14 +287,28 @@ public class EmetteurAnalogique extends Transmetteur<Boolean, Float> {
 							}
 						}
 					}
-				}
-				int size = informationAnalogique.nbElements();
-				System.out.println(size);
+				} 
 			}
 			position++;
+			System.out.println(position);
+			if (position == informationRecue.nbElements()) { // quand on est au dernier élément
+				if (informationRecue.iemeElement(position-1) == true) { // on regarde si on était à 1
+					// alors on redescend jusqu'à 0
+					float init = max;
+					for (int j=0 ; j<dist ; j++) {
+						init-=pasP;
+						informationAnalogique.add(init);
+					}
+				} else { // sinon on était à 0
+					// et il faut remonter
+					float init = min;
+					for (int j=0 ; j<dist ; j++) {
+						init-=pasN;
+						informationAnalogique.add(init);
+					}
+				}	
+			}
 		}
-		int size = informationAnalogique.nbElements();
-		System.out.println(size);
 	}
 	
 
