@@ -167,7 +167,7 @@ public class EmetteurAnalogique extends Transmetteur<Boolean, Float> {
 		// définition des valeurs de pas
 		float pasP = calculPasPositif(nEch, max);
 		float pasN = calculPasNegatif(nEch, min);
-		float dist = nEch / 3;
+		double dist = (float)nEch / 3.0f;
 
 		Iterator<Boolean> bitCourant = informationRecue.iterator();
 
