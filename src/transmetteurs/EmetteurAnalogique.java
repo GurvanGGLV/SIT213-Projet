@@ -172,7 +172,6 @@ public class EmetteurAnalogique extends Transmetteur<Boolean, Float> {
 		// codage avec for each
 		int position = 0; // sert à savoir où l'on est dans informationRecue
 		for (boolean b : informationRecue) {
-			System.out.println(b);
 			// on prend le cas où il n'y a qu'un bit
 			if (informationRecue.nbElements() == 1) {
 				// on regarde la valeur du bit
@@ -290,7 +289,6 @@ public class EmetteurAnalogique extends Transmetteur<Boolean, Float> {
 				} 
 			}
 			position++;
-			System.out.println(position);
 			if (position == informationRecue.nbElements()) { // quand on est au dernier élément
 				if (informationRecue.iemeElement(position-1) == true) { // on regarde si on était à 1
 					// alors on redescend jusqu'à 0
