@@ -289,14 +289,32 @@ public class EmetteurAnalogique extends Transmetteur<Boolean, Float> {
 							}
 						}
 					}
-				}
+				} 
 				int size = informationAnalogique.nbElements();
 				System.out.println(size);
 			}
 			position++;
+			System.out.println(position);
+			if (position == informationRecue.nbElements()) { // quand on est au dernier élément
+				if (informationRecue.iemeElement(position-1) == true) { // on regarde si on était à 1
+					// alors on redescend jusqu'à 0
+					float init = max;
+					for (int j=0 ; j<dist ; j++) {
+						init-=pasP;
+						informationAnalogique.add(init);
+					}
+				} else { // sinon on était à 0
+					// et il faut remonter
+					float init = min;
+					for (int j=0 ; j<dist ; j++) {
+						init-=pasN;
+						informationAnalogique.add(init);
+					}
+				}	
+			}
 		}
 		int size = informationAnalogique.nbElements();
-		System.out.println(size);
+		System.out.println("Taille finale " + size);
 	}
 	
 
