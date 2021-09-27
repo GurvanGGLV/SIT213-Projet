@@ -121,27 +121,25 @@ public class EmetteurAnalogique extends Transmetteur<Boolean, Float> {
 		
 		informationAnalogique = new Information<Float>();
 		
-		for(int i = 0 ; i < this.informationRecue.nbElements() ; i++) { // parcourt le message binaire { true false..true true...}
-			for (int k = 0 ; k < nEch ; k++) { 
-				
-				// cette boucle permet d'approximer le signal numerique en analogique, pour une valeur binaire il y aura nEch echantillons
-				
-				if(this.informationRecue.iemeElement(i)) { 
-					if(k < nEch/3) {		
-					
-						// la methode RZ decompose le signal binaire en 3 partie, pour un bit 1, 2/3 de ses valeurs sont mises a 0, le tier restant prend la valeur max
-						// ici on regarde c'est trois intervalles, lorsque k est superieur au premiere tier a valeur 0, le second tier ou les valeurs prennent la valeur max
-						// le troisieme tier qui reprend les valeurs a 0.
-						
-						informationAnalogique.add((float) 0);
+		float dist = (float)nEch/(float)3;
+	
+		for(boolean bitCourant : informationRecue) { // on regarde chaque bit
+			if(bitCourant == true) { // si c'est un true
+				for(int j=0 ; j<dist ; j++) { // 1/3 tbit à 0
+					informationAnalogique.add(0f);
+				}
+				for(int j=0 ; j<dist ; j++) { // 1/3 tbit à max
+					informationAnalogique.add(max);
+				}
+				for(int j=0 ; j<dist ; j++) { // 1/3 tbit à 0
+					informationAnalogique.add(0f);
+				}
+			} else { // sinon tout à 0
+				for(int tBit=0 ; tBit<3 ; tBit++) {
+					for(int j=0 ; j<dist ; j++) {
+						informationAnalogique.add(0f);
 					}
-					else if (k > nEch/3 && k < 2*nEch/3) {
-						informationAnalogique.add(max);
-					}
-					else if (k > 2*nEch/3) {
-						informationAnalogique.add((float) 0);
-					}
-				} else informationAnalogique.add((float) 0);
+				}
 			}
 		}
 	}
@@ -290,8 +288,6 @@ public class EmetteurAnalogique extends Transmetteur<Boolean, Float> {
 						}
 					}
 				} 
-				int size = informationAnalogique.nbElements();
-				System.out.println(size);
 			}
 			position++;
 			System.out.println(position);
@@ -313,8 +309,6 @@ public class EmetteurAnalogique extends Transmetteur<Boolean, Float> {
 				}	
 			}
 		}
-		int size = informationAnalogique.nbElements();
-		System.out.println("Taille finale " + size);
 	}
 	
 
