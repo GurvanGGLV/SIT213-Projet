@@ -32,12 +32,12 @@ public class GenerationCourbeTEBSNR {
 			System.out.println("Dossier GenerationCourbeTESBSNR existant");
 
 		Simulateur simulateur = null; // Création du simulateur 
-		int nbSignaux = 5; // Nombre de signaux à simuler pour l'exécution
+		int nbSignaux = 10; // Nombre de signaux à simuler pour l'exécution
 		float snrDb =0; //  Initialisation de la variable snrDb utiliser pour récuper la valeur logarithmique de snrpb
-		String[] codages = new String[] {"RZ", "NRZ", "NRZT"}; // Initialise et instancie les trois types de codages
+		String[] codages = new String[] {"NRZ", "RZ", "NRZT"}; // Initialise et instancie les trois types de codages
 
 		// Boucle pour tester les trois codages
-		for (int indexCodages = 0; indexCodages<3 ; indexCodages++){
+		for (int indexCodages = 0; indexCodages<1 ; indexCodages++){
 			String typeCodage = codages[indexCodages]; // Prend la valeur des trois codage en fonction de la valeur de l'indexCodages
 			System.out.println(codages[indexCodages]);
 			
@@ -64,11 +64,11 @@ public class GenerationCourbeTEBSNR {
 				if (indexSNR <-9 ) {
 					indexSNR--;
 				}
-
+				
 				// On convertit la valeur du snrpb en String pour pouvoir la passer en argument du simulateur
 				String indexSNRString =	 String.valueOf(indexSNR);
 				// Arguments passés dans le simulateur
-				String[] arg = new String[]{"-mess","2500" , "-form",  typeCodage ,  "-ampl", "-2",  "2",  "-nbEch", "30" , "-snrpb" , indexSNRString };
+				String[] arg = new String[]{"-mess","3000" , "-form",  typeCodage ,  "-ampl", "-2",  "2",  "-nbEch", "100" , "-snrpb" , indexSNRString };
 
 				// Initialisation du simulateur avec les bon arguments
 				try {
@@ -88,31 +88,20 @@ public class GenerationCourbeTEBSNR {
 
 					float totTEB = 0; // Variable pour l'addition des TEB
 					
-					System.out.println(s + " Pour " + nbSignaux + " signaux. " );
+					//System.out.println(s + " Pour " + nbSignaux + " signaux. " );
 					
 					// On génère nbSignaux dans le simulateur
 					for (int j = 0 ; j<nbSignaux ; j++) { 
 						simulateur.execute();
-						System.out.println("Signal n° " + (j+1) +"  =>   TEB : " + simulateur.calculTauxErreurBinaire());
+						//System.out.println("Signal n° " + (j+1) +"  =>   TEB : " + simulateur.calculTauxErreurBinaire());
 						totTEB += simulateur.calculTauxErreurBinaire(); // On additionne les TEB des signaux 
 					}
 
 					// Modification sur la forme du SNR
 					float snrLineaire = Float.parseFloat(arg[10]); // Converti la string associée au SNR linéraire en float
-
-					if (snrLineaire <0 ) // En fonction de si le snr est négatif :
-						snrDb = (float) (-10*Math.log10(-snrLineaire)); //Soit inverse le SNR Db pour obtenir le SNR négatif
-					else	
-						snrDb = (float) (10*Math.log10(snrLineaire)); // Soit on calcul le SNR Db normalement
-
-					// On utilise les méthodes de NumberFormat pour limiter le nombre de chiffre après la virgule
-					NumberFormat format=NumberFormat.getInstance(); // Initialise une variable format pour pouvoir utiliser les méthodes de la classe NumberFormat
-					format.setMinimumFractionDigits(3); // limite à trois chiffres après la virgule
-					String snrDbString =format.format(snrDb); // On reconverti notre snrDb en String pour l'affichage dans les fichiers .txt
-
-
+					
 					// Ecriture des résultats dans les fichiers 
-					writer.write(+ totTEB/nbSignaux + " " + snrDbString + "\n"); // On écrit dans le writer le TEB moyenné pour les nbSignaux pour chaque niveau de bruit snrpb en Db		
+					writer.write(+ totTEB/nbSignaux + " " + snrLineaire + "\n"); // On écrit dans le writer le TEB moyenné pour les nbSignaux pour chaque niveau de bruit snrpb en Db		
 
 
 
