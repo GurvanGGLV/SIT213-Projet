@@ -35,7 +35,7 @@ public class EmetteurAnalogique extends Transmetteur<Boolean, Float> {
 
 	public EmetteurAnalogique(String forme, int nEch, float min, float max) {
 
-		super();
+		//super();
 		
 		this.forme = forme;
 		this.nEch = nEch;

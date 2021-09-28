@@ -38,7 +38,7 @@ public class DecodeurAnalogique extends Transmetteur<Float, Boolean>
 	
 	public DecodeurAnalogique(String forme, int nEch, float min, float max) 
 	{
-		super();
+		//super();
 		
 		this.forme = forme;
 		this.nEch = nEch;

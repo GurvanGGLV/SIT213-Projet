@@ -14,7 +14,7 @@ public class GenerateurBruitGaussien extends Transmetteur<Float,Float>{
 	
 	public GenerateurBruitGaussien(float snr, int nEch) {		
 		
-		super();
+		//super();
 		
 		this.nbEch = nEch;
 		this.snr = snr; 
