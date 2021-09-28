@@ -3,7 +3,6 @@ package Courbes;
 
 import simulateur.Simulateur;
 import java.io.*;
-import java.text.*;
 
 /**
  * 
