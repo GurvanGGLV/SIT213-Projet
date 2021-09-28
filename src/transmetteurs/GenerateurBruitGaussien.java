@@ -12,6 +12,10 @@ public class GenerateurBruitGaussien extends Transmetteur<Float,Float>{
 	private float snr; // snr en dB
 	protected Information<Float> informationBruitee;
 	
+	public static String ast = "*";
+	public static String [][] histo = new String [10][10];
+	public static double [] values = new double [1000];
+	
 	public GenerateurBruitGaussien(float snr, int nEch) {		
 		
 		super();
@@ -38,6 +42,13 @@ public class GenerateurBruitGaussien extends Transmetteur<Float,Float>{
 		for(float s : informationRecue) {
 			s+=calculBruit(sigma); // le float courant + le bruit calculé à cet instant
 			informationBruitee.add(s); // on remplit informationBruitee
+		}
+		
+		for(int i = 0; i<1000; i++)
+		{
+			bruit = calculBruit(sigma);
+			values[i] = Math.round(bruit*10000)/10000;
+			System.out.println(values[i]);
 		}
 		
 		for(DestinationInterface<Float> destinationConnectee : destinationsConnectees ) {
@@ -72,7 +83,7 @@ public class GenerateurBruitGaussien extends Transmetteur<Float,Float>{
 		// création de 2 variables aléatoire uniformes
 		Random a1 = new Random();
 		Random a2 = new Random();
-	
+
 		// on retourne le calul présenté dans les documents de TP3
 		return (float)(sigmaB*Math.sqrt(-2*Math.log(1-a1.nextFloat()))*Math.cos(2*Math.PI*a2.nextFloat()));
 	}

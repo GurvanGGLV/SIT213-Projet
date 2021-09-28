@@ -24,12 +24,10 @@ import information.InformationNonConformeException;
 public class EmetteurAnalogique extends Transmetteur<Boolean, Float> {
 
 	private String forme;
-
 	private int nEch;
-
 	private float min;
-
 	private float max;
+
 
 	protected Information<Float> informationAnalogique;
 
