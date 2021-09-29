@@ -42,7 +42,6 @@ public class EmetteurAnalogique extends Transmetteur<Boolean, Float> {
 		this.min = min;
 		this.max = max;
 		informationAnalogique = null;
-
 	}
 
 	
@@ -165,9 +164,12 @@ public class EmetteurAnalogique extends Transmetteur<Boolean, Float> {
 		// définition des valeurs de pas
 		float pasP = calculPasPositif(nEch, max);
 		float pasN = calculPasNegatif(nEch, min);
+		//float pasP =
+				
+		
 		double dist = (float)nEch / 3.0f;
 
-		Iterator<Boolean> bitCourant = informationRecue.iterator();
+		//Iterator<Boolean> bitCourant = informationRecue.iterator(); // pas besoin au final
 
 		// codage avec for each
 		int position = 0; // sert à savoir où l'on est dans informationRecue
@@ -179,7 +181,6 @@ public class EmetteurAnalogique extends Transmetteur<Boolean, Float> {
 					float init = 0;
 					for (int j = 0; j < dist; j++) {
 						informationAnalogique.add(init);
-						System.out.println(init);
 						init += pasP;
 					}
 					for (int j = 0; j < dist; j++) {
@@ -212,8 +213,8 @@ public class EmetteurAnalogique extends Transmetteur<Boolean, Float> {
 					if (b == true) { // réception d'un bit positif
 						float init = 0;
 						for (int j = 0; j < dist; j++) { // montée
-							informationAnalogique.add(init);
 							init += pasP;
+							informationAnalogique.add(init);
 						}
 						for (int j = 0; j < dist; j++) { // valeur max 1/3 tbit
 							informationAnalogique.add(max);
@@ -221,8 +222,8 @@ public class EmetteurAnalogique extends Transmetteur<Boolean, Float> {
 					} else if (b == false) { // réception d'un bit négatif
 						float init = 0;
 						for (int j = 0; j < dist; j++) { // on passe de 0 à min
-							informationAnalogique.add(init);
 							init += pasN;
+							informationAnalogique.add(init);
 						}
 						for (int j = 0; j < dist; j++) { // plafond à min
 							informationAnalogique.add(init);
@@ -273,8 +274,9 @@ public class EmetteurAnalogique extends Transmetteur<Boolean, Float> {
 						} else if (informationRecue.iemeElement(bitPrec) != b) { // si le précédent était un 1
 							float init = max;
 							for (int j = 0; j < dist; j++) { // on redescend jusq'à 0
-								informationAnalogique.add(init);
 								init -= pasP;
+								informationAnalogique.add(init);
+								
 							}
 							// init=0; // on se place bien à 0
 							for (int j = 0; j < dist; j++) { // on descend jusqu'à min 1/3 tBit
