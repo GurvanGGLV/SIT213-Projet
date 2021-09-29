@@ -32,13 +32,12 @@ public class GenerationCourbeTEBSNR {
 
 		Simulateur simulateur = null; // Création du simulateur 
 		int nbSignaux = 10; // Nombre de signaux à simuler pour l'exécution
-		float snrDb =0; //  Initialisation de la variable snrDb utiliser pour récuper la valeur logarithmique de snrpb
 		String[] codages = new String[] {"NRZ", "RZ", "NRZT"}; // Initialise et instancie les trois types de codages
 
 		// Boucle pour tester les trois codages
-		for (int indexCodages = 0; indexCodages<1 ; indexCodages++){
+		for (int indexCodages = 0; indexCodages<3 ; indexCodages++){
 			String typeCodage = codages[indexCodages]; // Prend la valeur des trois codage en fonction de la valeur de l'indexCodages
-			System.out.println(codages[indexCodages]);
+			System.out.println("Génration des valeurs pour " + codages[indexCodages]);
 			
 			final FileWriter writer = new FileWriter(fichiers+"/Gen"+typeCodage+".txt"); // permet de créer un fichier qui peut être écrit
 			
@@ -80,19 +79,15 @@ public class GenerationCourbeTEBSNR {
 				}
 
 				try {
-					String s = "java  Simulateur  ";
-					for (int i = 0; i < arg.length; i++) { // copier tous les param�tres de simulation
-						s += arg[i] + "  ";
-					}
-
+					
 					float totTEB = 0; // Variable pour l'addition des TEB
 					
-					//System.out.println(s + " Pour " + nbSignaux + " signaux. " );
+					//System.out.println(s + " Pour " + nbSignaux + " signaux. " ); // print test
 					
 					// On génère nbSignaux dans le simulateur
 					for (int j = 0 ; j<nbSignaux ; j++) { 
 						simulateur.execute();
-						//System.out.println("Signal n° " + (j+1) +"  =>   TEB : " + simulateur.calculTauxErreurBinaire());
+						//System.out.println("Signal n° " + (j+1) +"  =>   TEB : " + simulateur.calculTauxErreurBinaire()); // print test
 						totTEB += simulateur.calculTauxErreurBinaire(); // On additionne les TEB des signaux 
 					}
 
