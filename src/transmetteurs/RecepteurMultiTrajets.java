@@ -43,9 +43,6 @@ public class RecepteurMultiTrajets extends Transmetteur<Float,Float> {
 		}
 		
 		// ce qu'on veut maintenant c'est nettoyer le signal rajouté pour chaque décalage
-		int alphaCourant = 0; // va nous servir à se repérer dans la liste des alphas
-		
-		// voir si on fait une méthode sort qui range les taus dans l'ordre croissant et les alphas associés
 		
 		for(int pos=0 ; pos<longueurUtile ; pos++) { // on va regarder chaque échantillon jusqu'à la longueur utile du signal
 			float temp = signalInitial.iemeElement(pos); // va nous servir à faire les opérations de nettoyage
@@ -55,7 +52,8 @@ public class RecepteurMultiTrajets extends Transmetteur<Float,Float> {
 				int decalage = listTaus.get(i);
 				if(pos>=decalage) { // on regarde quand on arrive au décalage
 					// une fois qu'on est arrivé au décalage 
-					temp = temp - (listAlphas.get(i)*signalInitial.iemeElement(i-decalage));
+					System.out.println(" i : " + i + " décalage : " + decalage);
+					temp = temp - (listAlphas.get(i)*signalInitial.iemeElement(pos-decalage));
 				}
 			}
 			// une fois qu'on a la valeur réelle de l'échantillon initial on remplace

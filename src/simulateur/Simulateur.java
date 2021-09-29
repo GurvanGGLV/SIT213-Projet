@@ -323,7 +323,7 @@ public class Simulateur {
 				}
 				
 				i++;
-				if(args[i].matches("[1-9]{1}"))
+				if(args[i].matches("0[.][0-9]+"))
 				{
 					try {
 						listAlphas.add(Float.valueOf(args[i]));

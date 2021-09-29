@@ -58,12 +58,12 @@ public class EmetteurMultiTrajets extends Transmetteur<Float,Float>{
 
 		for (int tau : listTaus) { // on va récupérer le signal initial, et le rajouter par décalage
 			// dans le signal mutli trajet
-			for (int pos = 0; pos < informationTi.nbElements(); pos++) {
-				if (pos >= tau && pos < informationTi.nbElements()) { // quand l'on atteint le premier décalage
+			for (int pos = 0; pos <=informationTi.nbElements(); pos++) {
+				if (pos >= tau && pos < informationRecue.nbElements()+tau) { // quand l'on atteint le premier décalage
 					// on récupère la valeur de l'échantillon actuel
 					float echCourant = informationTi.iemeElement(pos);
 					// on récupère le premier echantillon équivalent dans le signal recu de base
-					float echEq = informationRecue.iemeElement(pos - tau); // le -tau permet de récupérer
+					float echEq = informationRecue.iemeElement(pos-tau); // le -tau permet de récupérer
 					// le premier échantillon du signal recu
 					float alpha = listAlphas.get(alphaCourant);
 
