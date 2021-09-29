@@ -19,7 +19,7 @@ public class EmetteurMultiTrajets extends Transmetteur<Float,Float>{
 	private ArrayList<Float> listAlphas; // liste des alphas entrés en arguments
 	protected Information<Float>informationTi; // information en trajet indirect
 	
-	public EmetteurMultiTrajets(ArrayList<Float> alphas, ArrayList<Integer> taus) {
+	public EmetteurMultiTrajets(ArrayList<Integer> taus, ArrayList<Float> alphas) {
 		// créer des classes exception
 		this.listAlphas = alphas;
 		this.listTaus = taus;

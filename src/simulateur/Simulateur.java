@@ -1,5 +1,7 @@
 package simulateur;
 
+import java.util.ArrayList;
+
 import destinations.Destination;
 import destinations.DestinationFinale;
 import information.Information;
@@ -8,7 +10,9 @@ import sources.SourceAleatoire;
 import sources.SourceFixe;
 import transmetteurs.DecodeurAnalogique;
 import transmetteurs.EmetteurAnalogique;
+import transmetteurs.EmetteurMultiTrajets;
 import transmetteurs.GenerateurBruitGaussien;
+import transmetteurs.RecepteurMultiTrajets;
 import transmetteurs.Transmetteur;
 import transmetteurs.TransmetteurParfait;
 import visualisations.Sonde;
@@ -86,6 +90,11 @@ public class Simulateur {
 
 	/** indique le type de forme pour le signal analogique */
 	private String form = "NRZ";
+	
+	
+	/** indique la présence de trajets multiples */
+	ArrayList<Integer> listTaus = new ArrayList<>();
+	ArrayList<Float> listAlphas = new ArrayList<>();
 
 	/**
 	 * Le constructeur de Simulateur construit une cha�ne de transmission compos�e
@@ -102,6 +111,9 @@ public class Simulateur {
 	 */
 	public Simulateur(String[] args) throws ArgumentsException {
 
+		listTaus.add(0);
+		listAlphas.add(0.0f);
+		
 		// analyser et r�cup�rer les arguments
 		analyseArguments(args);
 
@@ -124,6 +136,8 @@ public class Simulateur {
 			// instanciation de l'émetteur et du décodeur
 			EmetteurAnalogique emetteurAnalogique = new EmetteurAnalogique(form, ne, min, max);
 			DecodeurAnalogique decodeurAnalogique = new DecodeurAnalogique(form, ne, min, max);
+			EmetteurMultiTrajets emetteurMT = new EmetteurMultiTrajets(listTaus, listAlphas);
+			RecepteurMultiTrajets recepteurMT = new RecepteurMultiTrajets(listTaus, listAlphas);
 
 			if (transBruitee == true) { // si la transmission est bruitée, on crée un generateur de bruit gaussien
 
@@ -131,7 +145,9 @@ public class Simulateur {
 
 				// connexion des différents éléments du système (avec bruit)
 				source.connecter(emetteurAnalogique);
-				emetteurAnalogique.connecter(generateurBruit);
+				emetteurAnalogique.connecter(emetteurMT);
+				emetteurMT.connecter(recepteurMT);
+				recepteurMT.connecter(generateurBruit);
 				generateurBruit.connecter(decodeurAnalogique);
 				decodeurAnalogique.connecter(destination);
 				
@@ -143,21 +159,26 @@ public class Simulateur {
 					Sonde<Float> sondeE = new SondeAnalogique("Signal Analogique Entree");
 					Sonde<Float> sondeB = new SondeAnalogique("Signal Bruité");
 					Sonde<Boolean> sondeC = new SondeLogique("Signal Sortie Décodeur", 10);
+					Sonde<Float> sondeEMT = new SondeAnalogique("Signal sortie emetteur MT");
+					Sonde<Float> sondeRMT = new SondeAnalogique("Signal sortie recepteur MT");
 
 					// Connexion des sondes
 					source.connecter(sondeL);
 					emetteurAnalogique.connecter(sondeE);
 					generateurBruit.connecter(sondeB);
 					decodeurAnalogique.connecter(sondeC);
+					emetteurMT.connecter(sondeEMT);
+					recepteurMT.connecter(sondeRMT);
 				}
 
 			} else {
 
 				// connexion des différents éléments du système (sans bruit)
 				source.connecter(emetteurAnalogique);
-				emetteurAnalogique.connecter(decodeurAnalogique);
-				decodeurAnalogique.connecter(transmetteurLogique);
-				transmetteurLogique.connecter(destination);
+				emetteurAnalogique.connecter(emetteurMT);
+				emetteurMT.connecter(recepteurMT);
+				recepteurMT.connecter(decodeurAnalogique);
+				decodeurAnalogique.connecter(destination);
 
 				// sondes
 				if (affichage == true) {
@@ -166,13 +187,15 @@ public class Simulateur {
 					Sonde<Boolean> sondeL = new SondeLogique("Signal Source", 10);
 					Sonde<Float> sondeE = new SondeAnalogique("Signal Analogique Entree");
 					Sonde<Boolean> sondeLS = new SondeLogique("Signal Sortie Décodeur", 10);
-					Sonde<Boolean> sondeF = new SondeLogique("Signal Final", 10);
+					Sonde<Float> sondeEMT = new SondeAnalogique("Signal sortie emetteur MT");
+					Sonde<Float> sondeRMT = new SondeAnalogique("Signal sortie recepteur MT");
 
 					// Connexion des sondes
 					source.connecter(sondeL);
 					emetteurAnalogique.connecter(sondeE);
 					decodeurAnalogique.connecter(sondeLS);
-					transmetteurLogique.connecter(sondeF);
+					emetteurMT.connecter(sondeEMT);
+					recepteurMT.connecter(sondeRMT);
 				}
 			}
 		} else {
@@ -289,8 +312,33 @@ public class Simulateur {
 				} catch (Exception e) {
 					throw new ArgumentsException("Valeur du snr invalide : " + args[i]);
 				}
+			} else if (args[i].matches("-ti")) {
+				
+				i++;				
+				
+				try {
+					listTaus.add(Integer.valueOf(args[i]));
+				} catch (Exception e) {
+					throw new ArgumentsException("Valeur de dt invalide : " + args[i]);
+				}
+				
+				i++;
+				if(args[i].matches("[1-9]{1}"))
+				{
+					try {
+						listAlphas.add(Float.valueOf(args[i]));
+					} catch (Exception e) {
+						throw new ArgumentsException("Valeur de ar invalide : " + args[i]);
+					}
+				} 
+				else
+				{
+					throw new ArgumentsException("Valeur de ar invalide : " + args[i]);
+				}
+				
+				
 			}
-
+			
 			// TODO : ajouter ci-apr�s le traitement des nouvelles options
 
 			else
