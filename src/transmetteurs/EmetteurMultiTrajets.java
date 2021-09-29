@@ -78,7 +78,6 @@ public class EmetteurMultiTrajets extends Transmetteur<Float,Float>{
 			}
 			alphaCourant++;
 		}
-
 		for (DestinationInterface<Float> destinationConnectee : destinationsConnectees) {
 			destinationConnectee.recevoir(informationTi);
 		}
