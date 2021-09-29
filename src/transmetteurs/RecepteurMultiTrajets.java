@@ -52,7 +52,6 @@ public class RecepteurMultiTrajets extends Transmetteur<Float,Float> {
 				int decalage = listTaus.get(i);
 				if(pos>=decalage) { // on regarde quand on arrive au décalage
 					// une fois qu'on est arrivé au décalage 
-					System.out.println(" i : " + i + " décalage : " + decalage);
 					temp = temp - (listAlphas.get(i)*signalInitial.iemeElement(pos-decalage));
 				}
 			}
