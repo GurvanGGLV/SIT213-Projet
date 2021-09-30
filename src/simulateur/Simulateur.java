@@ -75,6 +75,9 @@ public class Simulateur {
 	/** indique si la transmition est bruitée pour une transmission analogique */
 	private boolean transBruitee = false;
 
+	/** indique si la transmition est multitrajet pour une transmission analogique*/
+	private boolean transMultiTraj = false;
+	
 	/** la valeur du rapport signal sur bruit entrée en argument */
 	private float snr = 0;
 
@@ -83,6 +86,7 @@ public class Simulateur {
 
 	/** l'amplitude max et min */
 	private float max = 1.0f;
+	
 	private float min = 0.0f;
 
 	/** indique l'utilisation d'un codeur */
@@ -111,8 +115,7 @@ public class Simulateur {
 	 */
 	public Simulateur(String[] args) throws ArgumentsException {
 
-		listTaus.add(0);
-		listAlphas.add(0.0f);
+		
 		
 		// analyser et r�cup�rer les arguments
 		analyseArguments(args);
@@ -144,11 +147,39 @@ public class Simulateur {
 				GenerateurBruitGaussien generateurBruit = new GenerateurBruitGaussien(snr, ne);
 
 				// connexion des différents éléments du système (avec bruit)
+				
+				
+				if(transMultiTraj == true) {
+					source.connecter(emetteurAnalogique);
+					emetteurAnalogique.connecter(emetteurMT);
+					emetteurMT.connecter(generateurBruit);
+					generateurBruit.connecter(recepteurMT);
+					recepteurMT.connecter(decodeurAnalogique);
+					decodeurAnalogique.connecter(destination);
+					if (affichage == true) {
+
+						// Création des sondes
+						Sonde<Boolean> sondeL = new SondeLogique("Signal Source", 10);
+						Sonde<Float> sondeE = new SondeAnalogique("Signal Analogique Entree");
+						Sonde<Float> sondeB = new SondeAnalogique("Signal Bruité");
+						Sonde<Boolean> sondeC = new SondeLogique("Signal Sortie Décodeur", 10);
+						Sonde<Float> sondeEMT = new SondeAnalogique("Signal sortie emetteur MT");
+						Sonde<Float> sondeRMT = new SondeAnalogique("Signal sortie recepteur MT");
+
+						// Connexion des sondes
+						source.connecter(sondeL);
+						emetteurAnalogique.connecter(sondeE);
+						generateurBruit.connecter(sondeB);
+						decodeurAnalogique.connecter(sondeC);
+						emetteurMT.connecter(sondeEMT);
+						recepteurMT.connecter(sondeRMT);
+					}
+				}
+				
+				
 				source.connecter(emetteurAnalogique);
-				emetteurAnalogique.connecter(emetteurMT);
-				emetteurMT.connecter(generateurBruit);
-				generateurBruit.connecter(recepteurMT);
-				recepteurMT.connecter(decodeurAnalogique);
+				emetteurAnalogique.connecter(generateurBruit);
+				generateurBruit.connecter(decodeurAnalogique);
 				decodeurAnalogique.connecter(destination);
 				
 				// sondes
@@ -175,9 +206,7 @@ public class Simulateur {
 
 				// connexion des différents éléments du système (sans bruit)
 				source.connecter(emetteurAnalogique);
-				emetteurAnalogique.connecter(emetteurMT);
-				emetteurMT.connecter(recepteurMT);
-				recepteurMT.connecter(decodeurAnalogique);
+				emetteurAnalogique.connecter(decodeurAnalogique);
 				decodeurAnalogique.connecter(destination);
 
 				// sondes
@@ -313,8 +342,9 @@ public class Simulateur {
 					throw new ArgumentsException("Valeur du snr invalide : " + args[i]);
 				}
 			} else if (args[i].matches("-ti")) {
-				
+				transMultiTraj = true;
 				i++;				
+				
 				
 				try {
 					listTaus.add(Integer.valueOf(args[i]));
