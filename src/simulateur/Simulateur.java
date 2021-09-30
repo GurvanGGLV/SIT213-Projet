@@ -146,9 +146,9 @@ public class Simulateur {
 				// connexion des différents éléments du système (avec bruit)
 				source.connecter(emetteurAnalogique);
 				emetteurAnalogique.connecter(emetteurMT);
-				emetteurMT.connecter(recepteurMT);
-				recepteurMT.connecter(generateurBruit);
-				generateurBruit.connecter(decodeurAnalogique);
+				emetteurMT.connecter(generateurBruit);
+				generateurBruit.connecter(recepteurMT);
+				recepteurMT.connecter(decodeurAnalogique);
 				decodeurAnalogique.connecter(destination);
 				
 				// sondes
