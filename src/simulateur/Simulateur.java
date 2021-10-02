@@ -8,6 +8,7 @@ import information.Information;
 import sources.Source;
 import sources.SourceAleatoire;
 import sources.SourceFixe;
+import transmetteurs.CodageCanal;
 import transmetteurs.DecodeurAnalogique;
 import transmetteurs.EmetteurAnalogique;
 import transmetteurs.EmetteurMultiTrajets;
@@ -69,6 +70,9 @@ public class Simulateur {
 	/** le composant Destination de la chaine de transmission */
 	private Destination<Boolean> destination = null;
 
+	/** le composant realisant le codage du canal de transmission */
+	private CodageCanal codageCanal = null; 
+	
 	/** indique si la transmition est analogique */
 	private boolean transAnalogique = false;
 
@@ -90,7 +94,7 @@ public class Simulateur {
 	private float min = 0.0f;
 
 	/** indique l'utilisation d'un codeur */
-	// private boolean codeur = false;
+	private Boolean codage = false;
 
 	/** indique le type de forme pour le signal analogique */
 	private String form = "NRZ";
@@ -127,6 +131,9 @@ public class Simulateur {
 			source = new SourceFixe(messageString);
 		}
 
+		// instanciation du codage Canal
+		codageCanal = new CodageCanal();
+		
 		// instanciation de(s) transmetteur(s)
 		transmetteurLogique = new TransmetteurParfait();
 
@@ -134,6 +141,9 @@ public class Simulateur {
 		destination = new DestinationFinale();
 
 		// création d'un emetteur analogique si précisé en argument
+		
+		if(codage == true ) {
+			
 		if (transAnalogique == true) {
 
 			// instanciation de l'émetteur et du décodeur
@@ -205,7 +215,8 @@ public class Simulateur {
 			} else {
 
 				// connexion des différents éléments du système (sans bruit)
-				source.connecter(emetteurAnalogique);
+				source.connecter(codageCanal);
+				codageCanal.connecter(emetteurAnalogique);
 				emetteurAnalogique.connecter(decodeurAnalogique);
 				decodeurAnalogique.connecter(destination);
 
@@ -218,9 +229,12 @@ public class Simulateur {
 					Sonde<Boolean> sondeLS = new SondeLogique("Signal Sortie Décodeur", 10);
 					Sonde<Float> sondeEMT = new SondeAnalogique("Signal sortie emetteur MT");
 					Sonde<Float> sondeRMT = new SondeAnalogique("Signal sortie recepteur MT");
-
+					Sonde<Boolean>sondeSC = new SondeLogique("Signal sortie codeur", 10);
+					
 					// Connexion des sondes
+					
 					source.connecter(sondeL);
+					codageCanal.connecter(sondeSC);
 					emetteurAnalogique.connecter(sondeE);
 					decodeurAnalogique.connecter(sondeLS);
 					emetteurMT.connecter(sondeEMT);
@@ -242,7 +256,118 @@ public class Simulateur {
 			// connexion des différents composants entre eux
 			source.connecter(transmetteurLogique);
 			transmetteurLogique.connecter(destination);
-			
+			}
+		}else {
+			if (transAnalogique == true) {
+
+				// instanciation de l'émetteur et du décodeur
+				EmetteurAnalogique emetteurAnalogique = new EmetteurAnalogique(form, ne, min, max);
+				DecodeurAnalogique decodeurAnalogique = new DecodeurAnalogique(form, ne, min, max);
+				EmetteurMultiTrajets emetteurMT = new EmetteurMultiTrajets(listTaus, listAlphas);
+				RecepteurMultiTrajets recepteurMT = new RecepteurMultiTrajets(listTaus, listAlphas);
+
+				if (transBruitee == true) { // si la transmission est bruitée, on crée un generateur de bruit gaussien
+
+					GenerateurBruitGaussien generateurBruit = new GenerateurBruitGaussien(snr, ne);
+
+					// connexion des différents éléments du système (avec bruit)
+					
+					
+					if(transMultiTraj == true) {
+						source.connecter(emetteurAnalogique);
+						emetteurAnalogique.connecter(emetteurMT);
+						emetteurMT.connecter(generateurBruit);
+						generateurBruit.connecter(recepteurMT);
+						recepteurMT.connecter(decodeurAnalogique);
+						decodeurAnalogique.connecter(destination);
+						if (affichage == true) {
+
+							// Création des sondes
+							Sonde<Boolean> sondeL = new SondeLogique("Signal Source", 10);
+							Sonde<Float> sondeE = new SondeAnalogique("Signal Analogique Entree");
+							Sonde<Float> sondeB = new SondeAnalogique("Signal Bruité");
+							Sonde<Boolean> sondeC = new SondeLogique("Signal Sortie Décodeur", 10);
+							Sonde<Float> sondeEMT = new SondeAnalogique("Signal sortie emetteur MT");
+							Sonde<Float> sondeRMT = new SondeAnalogique("Signal sortie recepteur MT");
+
+							// Connexion des sondes
+							source.connecter(sondeL);
+							emetteurAnalogique.connecter(sondeE);
+							generateurBruit.connecter(sondeB);
+							decodeurAnalogique.connecter(sondeC);
+							emetteurMT.connecter(sondeEMT);
+							recepteurMT.connecter(sondeRMT);
+						}
+					}
+					
+					
+					source.connecter(emetteurAnalogique);
+					emetteurAnalogique.connecter(generateurBruit);
+					generateurBruit.connecter(decodeurAnalogique);
+					decodeurAnalogique.connecter(destination);
+					
+					// sondes
+					if (affichage == true) {
+
+						// Création des sondes
+						Sonde<Boolean> sondeL = new SondeLogique("Signal Source", 10);
+						Sonde<Float> sondeE = new SondeAnalogique("Signal Analogique Entree");
+						Sonde<Float> sondeB = new SondeAnalogique("Signal Bruité");
+						Sonde<Boolean> sondeC = new SondeLogique("Signal Sortie Décodeur", 10);
+						Sonde<Float> sondeEMT = new SondeAnalogique("Signal sortie emetteur MT");
+						Sonde<Float> sondeRMT = new SondeAnalogique("Signal sortie recepteur MT");
+
+						// Connexion des sondes
+						source.connecter(sondeL);
+						emetteurAnalogique.connecter(sondeE);
+						generateurBruit.connecter(sondeB);
+						decodeurAnalogique.connecter(sondeC);
+						emetteurMT.connecter(sondeEMT);
+						recepteurMT.connecter(sondeRMT);
+					}
+
+				} else {
+
+					// connexion des différents éléments du système (sans bruit)
+					source.connecter(codageCanal);
+					codageCanal.connecter(emetteurAnalogique);
+					emetteurAnalogique.connecter(decodeurAnalogique);
+					decodeurAnalogique.connecter(destination);
+
+					// sondes
+					if (affichage == true) {
+
+						// Création des sondes
+						Sonde<Boolean> sondeL = new SondeLogique("Signal Source", 10);
+						Sonde<Float> sondeE = new SondeAnalogique("Signal Analogique Entree");
+						Sonde<Boolean> sondeLS = new SondeLogique("Signal Sortie Décodeur", 10);
+						Sonde<Float> sondeEMT = new SondeAnalogique("Signal sortie emetteur MT");
+						Sonde<Float> sondeRMT = new SondeAnalogique("Signal sortie recepteur MT");
+
+						// Connexion des sondes
+						source.connecter(sondeL);
+						emetteurAnalogique.connecter(sondeE);
+						decodeurAnalogique.connecter(sondeLS);
+						emetteurMT.connecter(sondeEMT);
+						recepteurMT.connecter(sondeRMT);
+					}
+				}
+			} else {
+				
+				// sonde
+				if (affichage == true) {
+					if (transAnalogique == false) {
+						Sonde<Boolean> sondeE = new SondeLogique("Sonde Entree", 10);
+						Sonde<Boolean> sondeS = new SondeLogique("Sonde Sortie", 10);
+						source.connecter(sondeE);
+						transmetteurLogique.connecter(sondeS);
+					}
+				}
+
+				// connexion des différents composants entre eux
+				source.connecter(transmetteurLogique);
+				transmetteurLogique.connecter(destination);
+				}
 		}
 	}
 
@@ -365,9 +490,10 @@ public class Simulateur {
 				{
 					throw new ArgumentsException("Valeur de ar invalide : " + args[i]);
 				}
-				
-				
+			} else if (args[i].matches("-codeur")) {
+				codage = true;
 			}
+			
 			
 			// TODO : ajouter ci-apr�s le traitement des nouvelles options
 
