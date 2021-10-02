@@ -15,7 +15,7 @@ public class DecodageCanal extends Transmetteur<Boolean,Boolean> {
 	protected Information<Boolean> informationDecodee;
 	
 	public DecodageCanal() {
-		
+		informationDecodee = null;
 	}
 
 	
@@ -32,7 +32,8 @@ public class DecodageCanal extends Transmetteur<Boolean,Boolean> {
 		
 	
 		
-		for(Iterator<Boolean> iterator = informationRecue.iterator() ; iterator.hasNext();) {
+		for(Iterator<Boolean> iterator = informationRecue.iterator() ; iterator.hasNext();) 
+		{
 			
 			Boolean bit1 = iterator.next(); // etude sur le premier bit 
 			Boolean bit2 = iterator.next();	// etude sur le second bit
@@ -46,31 +47,38 @@ public class DecodageCanal extends Transmetteur<Boolean,Boolean> {
 			switch(tabBitString) {
 			case  "[true, false, true]":
 				informationDecodee.add(true);
+				break;
 			
 			case "[true, false, false]":
 				informationDecodee.add(true);
+				break;
 			
 			case "[false, false, false]":
 				informationDecodee.add(false);
+				break;
 				
 			case "[false, false, true]":
 				informationDecodee.add(true);
+				break;
 				
 			case "[false, true, false]":
 				informationDecodee.add(false);
+				break;
 				
 			case "[false, true, true]":
 				informationDecodee.add(false);
+				break;
 				
 			case "[true, true, false]":
 				informationDecodee.add(false);
+				break;
 
 			}
-			
-			for ( DestinationInterface<Boolean> destinationConnectee : destinationsConnectees) {
-				destinationConnectee.recevoir(informationDecodee);
-			}
-			this.informationEmise = informationDecodee;
 		}
+		
+		for ( DestinationInterface<Boolean> destinationConnectee : destinationsConnectees) {
+			destinationConnectee.recevoir(informationDecodee);
+		}
+		this.informationEmise = informationDecodee;
 	}
 }

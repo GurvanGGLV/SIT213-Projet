@@ -205,7 +205,7 @@ public class Simulateur {
 							Sonde<Boolean> sondeL = new SondeLogique("Signal Source", 10);
 							Sonde<Float> sondeE = new SondeAnalogique("Signal Analogique Entree");
 							Sonde<Float> sondeB = new SondeAnalogique("Signal Bruité");
-							Sonde<Boolean> sondeC = new SondeLogique("Signal Sortie Décodeur", 10);
+							Sonde<Boolean> sondeC = new SondeLogique("Signal Récepteur", 10);
 							Sonde<Boolean> sondeCodage = new SondeLogique("Sonde Sortie Codage", 10);
 							Sonde<Boolean> sondeDeodage = new SondeLogique("Sonde Sortie Decodage", 10);
 	
@@ -289,7 +289,7 @@ public class Simulateur {
 						Sonde<Boolean> sondeE = new SondeLogique("Sonde Entree", 10);
 						Sonde<Boolean> sondeCodage = new SondeLogique("Sonde Sortie Codage", 10);
 						Sonde<Boolean> sondeDeodage = new SondeLogique("Sonde Sortie Decodage", 10);
-						Sonde<Boolean> sondeS = new SondeLogique("Sonde Sortie", 10);
+						Sonde<Boolean> sondeS = new SondeLogique("Sonde Reception", 10);
 						
 						
 						source.connecter(sondeE);
