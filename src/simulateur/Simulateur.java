@@ -530,28 +530,34 @@ public class Simulateur {
 				}
 			} else if (args[i].matches("-ti")) {
 				transMultiTraj = true;
-				i++;				
 				
+				int debutTI = i;
 				
-				try {
-					listTaus.add(Integer.valueOf(args[i]));
-				} catch (Exception e) {
-					throw new ArgumentsException("Valeur de dt invalide : " + args[i]);
-				}
-				
-				i++;
-				if(args[i].matches("0[.][0-9]+"))
-				{
+				while (i+1 < args.length && !args[i+1].matches("^-[a-z]+") && i < debutTI+11)
+				{					
+					i++;
 					try {
-						listAlphas.add(Float.valueOf(args[i]));
+						listTaus.add(Integer.valueOf(args[i]));
 					} catch (Exception e) {
+						throw new ArgumentsException("Valeur de dt invalide : " + args[i]);
+					}
+					
+					i++;
+					if(args[i].matches("0[.][0-9]+"))
+					{
+						try {
+							listAlphas.add(Float.valueOf(args[i]));
+						} catch (Exception e) {
+							throw new ArgumentsException("Valeur de ar invalide : " + args[i]);
+						}
+					}
+					else
+					{
 						throw new ArgumentsException("Valeur de ar invalide : " + args[i]);
 					}
-				} 
-				else
-				{
-					throw new ArgumentsException("Valeur de ar invalide : " + args[i]);
+					
 				}
+				
 			} else if (args[i].matches("-codeur")) {
 				codage = true;
 			}
