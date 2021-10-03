@@ -31,7 +31,7 @@ public class GenerationCourbeTEBSNR {
 			System.out.println("Dossier GenerationCourbeTESBSNR existant");
 
 		Simulateur simulateur = null; // Création du simulateur 
-		int nbSignaux = 10; // Nombre de signaux à simuler pour l'exécution
+		int nbSignaux = 3; // Nombre de signaux à simuler pour l'exécution
 		String[] codages = new String[] {"NRZ", "RZ", "NRZT"}; // Initialise et instancie les trois types de codages
 
 		// Boucle pour tester les trois codages
@@ -47,26 +47,23 @@ public class GenerationCourbeTEBSNR {
 			// Boucle pour le test en fonction des différents niveaux de bruit
 			while (indexSNR > -40 ) {
 				// Création de différents pas de décrémentation pour obtenir le plus de valeurs pertinentes
-				if (indexSNR > 4) {
+				if (indexSNR > 4) 
+					indexSNR--;
+				
+				
+				if (indexSNR > -9 && indexSNR <= 4  ) 
+					indexSNR = (float) (indexSNR - 0.25);	
+				
+				
+				if (indexSNR <=-9 ) {
 					indexSNR--;
 				}
 				
-				if (indexSNR > -9 && indexSNR <= 4  ) {
-					indexSNR = (float) (indexSNR - 0.25);	
-
-					// Cas ou SNR = 0 pour éviter d'avoir un SNRdB non défini (infini)
-					if (indexSNR == 0);{
-						indexSNR = indexSNR + (float) 0.0001; 
-					}
-				}
-				if (indexSNR <-9 ) {
-					indexSNR--;
-				}
 				
 				// On convertit la valeur du snrpb en String pour pouvoir la passer en argument du simulateur
 				String indexSNRString =	 String.valueOf(indexSNR);
 				// Arguments passés dans le simulateur
-				String[] arg = new String[]{"-mess","3000" , "-form",  typeCodage ,  "-ampl", "-2",  "2",  "-nbEch", "100" , "-snrpb" , indexSNRString };
+				String[] arg = new String[]{"-mess","1000" , "-form",  typeCodage ,  "-ampl", "-2",  "2",  "-nbEch", "100" , "-snrpb" , indexSNRString };
 
 				// Initialisation du simulateur avec les bon arguments
 				try {
@@ -82,7 +79,7 @@ public class GenerationCourbeTEBSNR {
 					
 					float totTEB = 0; // Variable pour l'addition des TEB
 					
-					//System.out.println(s + " Pour " + nbSignaux + " signaux. " ); // print test
+					//System.out.println(" Pour " + nbSignaux + " signaux. " ); // print test
 					
 					// On génère nbSignaux dans le simulateur
 					for (int j = 0 ; j<nbSignaux ; j++) { 
@@ -108,6 +105,6 @@ public class GenerationCourbeTEBSNR {
 			// On ferme le fichier en cours d'écriture
 			writer.close();	
 		}
-	}
-}
+	}}
+
 
