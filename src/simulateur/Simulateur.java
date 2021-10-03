@@ -20,6 +20,7 @@ import transmetteurs.TransmetteurParfait;
 import visualisations.Sonde;
 import visualisations.SondeAnalogique;
 import visualisations.SondeLogique;
+import java.util.Iterator;
 
 /**
  * 
@@ -590,22 +591,22 @@ public class Simulateur {
 	 */
 	public float calculTauxErreurBinaire() {
 
-		// r�ception
-		Information<Boolean> signalRecu = destination.getInformationRecue();
-		
-		// calcul
-		Information<Boolean> signalEmis = source.getInformationEmise();
-		int longueurEmission = signalEmis.nbElements();
+		int longueurEmission = source.getInformationEmise().nbElements();
 		int nbErreurs = 0;
-
-		for (int i = 0; i < longueurEmission; i++) {
-			if (signalRecu.iemeElement(i) != signalEmis.iemeElement(i)) {
-				nbErreurs += 1;
-			}
-		}
 		
-		float teb = ((float) nbErreurs / (float) longueurEmission);
-		return teb;
+		Iterator<Boolean> iteratorS = source.getInformationEmise().iterator();
+		Iterator<Boolean> iteratorR = destination.getInformationRecue().iterator();
+		
+		while(iteratorS.hasNext() && iteratorR.hasNext())
+		{
+			Boolean bitEmis = iteratorS.next();
+			Boolean bitRecu = iteratorR.next();
+			
+			if(bitEmis != bitRecu)
+				nbErreurs++;
+		}
+
+		return ((float) nbErreurs / (float) longueurEmission);
 	}
 
 	/**
