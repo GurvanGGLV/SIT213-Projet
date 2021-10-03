@@ -39,6 +39,9 @@ public class EmetteurMultiTrajets extends Transmetteur<Float,Float>{
 		// on initialise la liste qui contiendra le multi trajet
 		informationTi = new Information<Float>();
 
+		
+		// A GARDER AU CAS OU CA NE MARCHE PLUS EN FOR EACH
+		/*
 		// on rajoute l'information utile puis un nombre de 0 égale à la valeur du plus
 		// grand décalage
 		for (int i = 0; i < (informationRecue.nbElements() + this.getTauMax()); i++) {
@@ -47,6 +50,13 @@ public class EmetteurMultiTrajets extends Transmetteur<Float,Float>{
 			} else { // quand on rentre dans le décalage on entre des 0
 				informationTi.add(0f);
 			}
+		}*/
+		
+		// meme chose en for each
+		for(float i : informationRecue) {
+			informationTi.add(i);
+		} for (int i=0 ; i<this.getTauMax() ; i++) {
+			informationTi.add(0f);
 		}
 
 		// on veut maintenant respecter r(t) = s(t) +Aks(t-Tk) + b(t) , k appartenant à
