@@ -53,6 +53,7 @@ public class EmetteurMultiTrajets extends Transmetteur<Float,Float>{
 		}*/
 		
 		// meme chose en for each
+		
 		for(float i : informationRecue) {
 			informationTi.add(i);
 		} for (int i=0 ; i<this.getTauMax() ; i++) {
