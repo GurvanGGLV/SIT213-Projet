@@ -163,6 +163,7 @@ public class EmetteurAnalogique extends Transmetteur<Boolean, Float> {
 		// EX : 50/3 = 16,67 alors tMonte = 17 tMax = 16
 		// EX2 : 70/3 = 23,3 alors tMonte = 23 tMax = 24
 		// si la première decimale est en dessous de 5 ou au dessus on change l'opération
+		
 		informationAnalogique = new Information<Float>();
 
 		// définition des valeurs de pas
@@ -171,7 +172,7 @@ public class EmetteurAnalogique extends Transmetteur<Boolean, Float> {
 		//float pasP =
 				
 		
-		double dist = (float)nEch / 3.0f;
+		float dist = (float)nEch / 3.0f;
 
 		//Iterator<Boolean> bitCourant = informationRecue.iterator(); // pas besoin au final
 
