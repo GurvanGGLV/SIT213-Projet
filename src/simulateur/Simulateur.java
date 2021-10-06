@@ -151,7 +151,7 @@ public class Simulateur {
 	
 				if (transBruitee == true) { // si la transmission est bruitée
 					// instanciation du générateur de bruit
-					GenerateurBruitGaussien generateurBruit = new GenerateurBruitGaussien(snr, ne);					
+					GenerateurBruitGaussien generateurBruit = new GenerateurBruitGaussien(snr, ne, seed);					
 					
 					if(transMultiTraj == true) { // si la transmission subit des décalages
 						//instanciation du multi-trajet
@@ -255,9 +255,11 @@ public class Simulateur {
 						}
 					} else { // si la transmission ne subit pas de décalage
 						//connexion des différents éléments du système
-						source.connecter(emetteurAnalogique);
+						source.connecter(codageCanal);
+						codageCanal.connecter(emetteurAnalogique);
 						emetteurAnalogique.connecter(decodeurAnalogique);
-						decodeurAnalogique.connecter(destination);
+						decodeurAnalogique.connecter(decodageCanal);
+						decodageCanal.connecter(destination);
 						
 						if (affichage == true) {
 							
@@ -310,7 +312,7 @@ public class Simulateur {
 	
 				if (transBruitee == true) { // si la transmission est bruitée
 					// instanciation du générateur de bruit
-					GenerateurBruitGaussien generateurBruit = new GenerateurBruitGaussien(snr, ne);					
+					GenerateurBruitGaussien generateurBruit = new GenerateurBruitGaussien(snr, ne, seed);					
 					
 					if(transMultiTraj == true) { // si la transmission subit des décalages
 						//instanciation du multi-trajet
