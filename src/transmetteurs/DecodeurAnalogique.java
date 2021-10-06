@@ -31,7 +31,7 @@ public class DecodeurAnalogique extends Transmetteur<Float, Boolean>
 	private float max;
 	protected Information<Boolean> informationNumerique;
 	
-	private double esperance = (max + min)/2;
+	private double esperance;
 	private double somme = 0;
 	private int compteurEch = 0;
 	//private int i = 0;
@@ -44,6 +44,7 @@ public class DecodeurAnalogique extends Transmetteur<Float, Boolean>
 		this.nEch = nEch;
 		this.min = min;
 		this.max = max;
+		this.esperance = (max + min)/2;
 		informationNumerique = null;	}
 	
 	public void recevoir(Information<Float> information) throws InformationNonConformeException 
@@ -129,7 +130,7 @@ public class DecodeurAnalogique extends Transmetteur<Float, Boolean>
 			
 			if (compteurEch == nEch)
 			{
-	            if(somme / nEch > (int)max/3)
+	            if(somme / nEch > max)
 					informationNumerique.add(true);
 	            else
 					informationNumerique.add(false);
@@ -139,5 +140,4 @@ public class DecodeurAnalogique extends Transmetteur<Float, Boolean>
 	        }
 		}
 	}
-
 }

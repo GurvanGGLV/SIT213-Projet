@@ -91,13 +91,13 @@ public class EmetteurAnalogique extends Transmetteur<Boolean, Float> {
 		
 		informationAnalogique = new Information<Float>();
 		
-		for(int i = 0 ; i < this.informationRecue.nbElements() ; i++) { // 1
+		for(boolean bitCurrent : informationRecue) { // 1
 			for (int k = 0 ; k < nEch ; k++) { // 2
 				
 				// Les elements du message sont parcourus 1 a 1, chaque element est ensuite decompose en nEch nombre d'echantillon
 				// la boucle "1" parcourt le message binaire tandis que la boucle "2" recompose l'information logique en une multitude de points => approximation du signal analogique
 			
-				if(this.informationRecue.iemeElement(i)) {
+				if(bitCurrent) {
 					informationAnalogique.add(max); 
 				}
 				else informationAnalogique.add(min); 
