@@ -84,8 +84,8 @@ public class GenerateurBruitGaussienTest
 	public void testCalculBruit()
 	{	
 		//TODO calculer valeur théorique pour comparer
-		collector.checkThat("Test de calculBruit 1", bruit1.calculBruit(3), is(0.0F));
-		collector.checkThat("Test de calculBruit 2", bruit2.calculBruit(5), is(0.0F));
+		collector.checkThat("Test de calculBruit 1", bruit1.calculBruit(3,null), is(0.0F)); // null pour la seed. Verifier si on peut changer ca
+		collector.checkThat("Test de calculBruit 2", bruit2.calculBruit(5,null), is(0.0F));
 	}
 	
 	@Test

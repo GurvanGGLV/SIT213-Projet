@@ -167,8 +167,9 @@ public class EmetteurAnalogique extends Transmetteur<Boolean, Float> {
 		informationAnalogique = new Information<Float>();
 
 		// définition des valeurs de pas
-		float pasP = calculPasPositif(nEch, max);
-		float pasN = calculPasNegatif(nEch, min);
+		float pasP = calculPasPositif(nEch, max); // ne change pas si nEch est multiple de 3
+		float pasN = calculPasNegatif(nEch, min); // ne change pas si nEch est multiple de 3
+		
 		//float pasP =
 		
 		int tVariation = 0;
@@ -186,9 +187,13 @@ public class EmetteurAnalogique extends Transmetteur<Boolean, Float> {
 			if (rounded < dist) {
 				tVariation = rounded;
 				tMax = rounded+1;
+				pasP = calculPasPositif(tVariation, max);
+				pasN = calculPasNegatif(tVariation, min);
 			} else {
 				tVariation = rounded;
 				tMax = rounded-1;
+				pasP = calculPasPositif(tVariation, max);
+				pasN = calculPasNegatif(tVariation, min); 
 			}
 		}
 		
@@ -339,38 +344,24 @@ public class EmetteurAnalogique extends Transmetteur<Boolean, Float> {
 	 * Cette méthode permet de calculer pour true la valeur du pas
 	 * 
 	 * @param max  - valeur du maximum qu'atteindra la valeur float pour true
-	 * @param nEch - nombre d'échantillons du signal
+	 * @param tVar - nombre d'échantillons du tier tBit montant
 	 * @return - un float étant la valeur du pas
 	 */
-	public float calculPasPositif(int nEch, float max) {
-
-		float xA = 0;
-		float xB = (float) nEch / 3;
-		float yA = 0;
-		float yB = max;
-
-		float pas = (yB - yA) / (xB - xA);
-
-		return pas;
+	public float calculPasPositif(int tVar, float max) {
+		
+		return max/(float)tVar;
 	}
 
 	/**
 	 * Cette méthode permet de calculer pour true la valeur du pas
 	 * 
 	 * @param max  - valeur du maximum qu'atteindra la valeur float pour true
-	 * @param nEch - nombre d'échantillons du signal
+	 * @param tVar - nombre d'échantillons du tier tBit montant
 	 * @return - un float étant la valeur du pas
 	 */
-	public float calculPasNegatif(int nEch, float min) {
+	public float calculPasNegatif(int tVar, float min) {
 
-		float xA = 0;
-		float xB = (float) nEch / 3;
-		float yA = 0;
-		float yB = min;
-
-		float pas = (yB - yA) / (xB - xA);
-
-		return pas;
+		return min/(float)tVar;
 	}
 
 	public int getnEch() {

@@ -14,12 +14,15 @@ public class GenerateurBruitGaussien extends Transmetteur<Float,Float>{
 	protected Information<Float> informationBruitee;
 	
 	public GenerateurBruitGaussien(float snr, int nEch, int seed) {	
-		
-		//super();
-		
 		this.nbEch = nEch;
 		this.snr = snr; 
 		this.seed = seed;
+		informationBruitee = null;
+	}
+	
+	public GenerateurBruitGaussien(float snr, int nEch) {
+		this.nbEch = nEch;
+		this.snr = snr;
 		informationBruitee = null;
 	}
 	
@@ -89,7 +92,7 @@ public class GenerateurBruitGaussien extends Transmetteur<Float,Float>{
 		// on retourne le calul présenté dans les documents de TP3
 		return (float)(sigmaB*Math.sqrt(-2*Math.log(1-a1.nextFloat()))*Math.cos(2*Math.PI*a2.nextFloat()));
 	}
-	
+		
 	public float calculSigma() {
 		
 		float sigma;
