@@ -318,6 +318,7 @@ public class Simulateur {
 					// instanciation du générateur de bruit
 					
 					GenerateurBruitGaussien generateurBruit = new GenerateurBruitGaussien(snr, ne);
+					
 					/*
 					if (aleatoireAvecGerme) {
 						generateurBruit = new GenerateurBruitGaussien(snr, ne, seed);
