@@ -33,11 +33,9 @@ public class DecodageCanal extends Transmetteur<Boolean,Boolean> {
 		informationDecodee = null;
 	}
 
-	
 	public void recevoir(Information<Boolean> information) throws InformationNonConformeException {
 		this.informationRecue = information;
 		this.emettre();
-		
 	}
 
 	/** 

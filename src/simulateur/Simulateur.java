@@ -605,14 +605,9 @@ public class Simulateur {
 	 */
 	public float calculTauxErreurBinaire() {
 
-		
+		/*
 		int longueurEmission = source.getInformationEmise().nbElements();
 		int nbErreurs = 0;
-		
-		Information<Boolean> siU = source.getInformationEmise();
-		Information<Boolean> siD = destination.getInformationRecue();
-		
-		
 		
 		Iterator<Boolean> iteratorS = source.getInformationEmise().iterator();
 		Iterator<Boolean> iteratorR = destination.getInformationRecue().iterator();
@@ -625,7 +620,26 @@ public class Simulateur {
 			if(bitEmis != bitRecu)
 				nbErreurs++;
 		}
-		return ((float) nbErreurs/(float) longueurEmission);
+		*/
+		int longueurEmission = source.getInformationEmise().nbElements();
+		int nbErreur = 0;
+		int longueurSignalFinal = destination.getInformationRecue().nbElements();
+		
+		System.out.println("Entrée : " + longueurEmission + " Sortie : " + longueurSignalFinal);
+		
+		Information<Boolean> informationInitiale = source.getInformationEmise();
+		Information<Boolean> informationFinale = destination.getInformationRecue();
+		
+		System.out.println("S " + informationInitiale.nbElements() + " : " + "E " +informationFinale.nbElements());
+		int pos = 0;
+		for(boolean infS : informationInitiale) {
+			if (infS != informationFinale.iemeElement(pos)) {
+				nbErreur++;
+			}
+			pos++;
+		}
+		
+		return ((float) nbErreur/(float) longueurEmission);
 	}
 
 	/**

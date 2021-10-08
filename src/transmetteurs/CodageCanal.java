@@ -55,7 +55,7 @@ public class CodageCanal extends Transmetteur<Boolean,Boolean> {
 				informationCodee.add(false);
 			}
 		}
-	
+		
 		for ( DestinationInterface<Boolean> destinationConnectee : destinationsConnectees) {
 			destinationConnectee.recevoir(informationCodee);
 		}
