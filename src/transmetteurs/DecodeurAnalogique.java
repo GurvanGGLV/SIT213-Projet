@@ -130,7 +130,7 @@ public class DecodeurAnalogique extends Transmetteur<Float, Boolean>
 			
 			if (compteurEch == nEch)
 			{
-	            if(somme/nEch > esperance) // j'ai rajouté /nEch
+	            if(somme > max/2)
 					informationNumerique.add(true);
 	            else
 					informationNumerique.add(false);
