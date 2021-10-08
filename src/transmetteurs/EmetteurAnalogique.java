@@ -44,7 +44,6 @@ public class EmetteurAnalogique extends Transmetteur<Boolean, Float> {
 		informationAnalogique = null;
 	}
 
-	
 	public void recevoir(Information<Boolean> information) throws InformationNonConformeException {
 
 		this.informationRecue = information;
@@ -256,17 +255,14 @@ public class EmetteurAnalogique extends Transmetteur<Boolean, Float> {
 						for (int j = 0; j < tMax; j++) { // plafond à min
 							informationAnalogique.add(init);
 						}
-					}
+					} 
 				} else if (position != 0) { // si on est entre le début et la fin (-1?)
 					if (b == true) { // on reçoit un bit positif
-						if (informationRecue.iemeElement(bitPrec) == b) { // si le bit
-																										// d'avant était
-																										// positif
-																										// également
-							for (int j = 0; j < tMax; j++) { // on laisse 3 paliers de max
+						if (informationRecue.iemeElement(bitPrec) == b) { // si le bit d'avant était positif également
+							for (int j = 0; j < tVariation; j++) { // on laisse 3 paliers de max
 								informationAnalogique.add(max);
 							}
-							for (int j = 0; j < tMax; j++) { // 2/3
+							for (int j = 0; j < tVariation; j++) { // 2/3
 								informationAnalogique.add(max);
 							}
 							for (int j = 0; j < tMax; j++) { // 3/3
@@ -290,10 +286,10 @@ public class EmetteurAnalogique extends Transmetteur<Boolean, Float> {
 						}
 					} else if (b == false) { // si l'on reçoit un bit 0
 						if (informationRecue.iemeElement(bitPrec) == b) { // et que le précédent était 0 aussi
-							for (int j = 0; j < tMax; j++) { // on reste à min 1/3
+							for (int j = 0; j < tVariation; j++) { // on reste à min 1/3
 								informationAnalogique.add(min);
 							}
-							for (int j = 0; j < tMax; j++) { // 2/3
+							for (int j = 0; j < tVariation; j++) { // 2/3
 								informationAnalogique.add(min);
 							}
 							for (int j = 0; j < tMax; j++) { // 3/3
@@ -314,8 +310,8 @@ public class EmetteurAnalogique extends Transmetteur<Boolean, Float> {
 							for (int j = 0; j < tMax; j++) {
 								informationAnalogique.add(init); // on reste ensuite à min pendant 1/3 tBit
 							}
-						}
-					}
+						} 
+					} 
 				} 
 			}
 			position++;
@@ -335,7 +331,7 @@ public class EmetteurAnalogique extends Transmetteur<Boolean, Float> {
 						informationAnalogique.add(init);
 					}
 				}	
-			}
+			} 
 		}
 	}
 	
