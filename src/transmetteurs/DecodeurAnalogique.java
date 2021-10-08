@@ -123,14 +123,14 @@ public class DecodeurAnalogique extends Transmetteur<Float, Boolean>
 	{
 		informationNumerique = new Information <Boolean> ();
 
-		for (double echantillon : informationRecue)
+		for (float echantillon : informationRecue)
 		{
 			compteurEch++;
             somme += echantillon;
 			
 			if (compteurEch == nEch)
 			{
-	            if(somme > esperance)
+	            if(somme/nEch > esperance) // j'ai rajouté /nEch
 					informationNumerique.add(true);
 	            else
 					informationNumerique.add(false);
