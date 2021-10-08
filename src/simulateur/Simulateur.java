@@ -605,7 +605,6 @@ public class Simulateur {
 	 */
 	public float calculTauxErreurBinaire() {
 
-		/*
 		int longueurEmission = source.getInformationEmise().nbElements();
 		int nbErreurs = 0;
 		
@@ -620,7 +619,8 @@ public class Simulateur {
 			if(bitEmis != bitRecu)
 				nbErreurs++;
 		}
-		*/
+		
+		/*
 		int longueurEmission = source.getInformationEmise().nbElements();
 		int nbErreur = 0;
 		int longueurSignalFinal = destination.getInformationRecue().nbElements();
@@ -638,8 +638,8 @@ public class Simulateur {
 			}
 			pos++;
 		}
-		
-		return ((float) nbErreur/(float) longueurEmission);
+		*/
+		return ((float) nbErreurs/(float) longueurEmission);
 	}
 
 	/**

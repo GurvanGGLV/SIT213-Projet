@@ -105,8 +105,6 @@ public class DecodageCanal extends Transmetteur<Boolean,Boolean> {
 				informationDecodee.add(true);
 			}
 		} 
-			
-		System.out.println("Taille après décodage : " + informationDecodee.nbElements());
 		
 		for ( DestinationInterface<Boolean> destinationConnectee : destinationsConnectees) {
 			destinationConnectee.recevoir(informationDecodee);
