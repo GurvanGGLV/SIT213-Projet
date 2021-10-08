@@ -10,15 +10,16 @@ public class GenerateurBruitGaussien extends Transmetteur<Float,Float>{
 
 	private int nbEch; // représente N = Te*Fe
 	private float snr; // snr en dB
-	private int seed;
+	//private int seed;
 	protected Information<Float> informationBruitee;
 	
+	/*
 	public GenerateurBruitGaussien(float snr, int nEch, int seed) {	
 		this.nbEch = nEch;
 		this.snr = snr; 
 		this.seed = seed;
 		informationBruitee = null;
-	}
+	}*/
 	
 	public GenerateurBruitGaussien(float snr, int nEch) {
 		this.nbEch = nEch;
@@ -40,7 +41,7 @@ public class GenerateurBruitGaussien extends Transmetteur<Float,Float>{
 		
 		// on ajoute le bruit au signal
 		for(float s : informationRecue) {
-			s+=calculBruit(sigma, seed); // le float courant + le bruit calculé à cet instant
+			s+=calculBruit(sigma); // le float courant + le bruit calculé à cet instant
 			informationBruitee.add(s); // on remplit informationBruitee
 		}
 		
@@ -71,11 +72,12 @@ public class GenerateurBruitGaussien extends Transmetteur<Float,Float>{
 		return puissanceMoyenneSignal;
 	}
 
-	public float calculBruit(float sigmaB, Integer seed) {
+	public float calculBruit(float sigmaB) {
 		
 		// création de 2 variables aléatoire uniformes
-		Random a1;
-		Random a2;
+		Random a1 = new Random();
+		Random a2 = new Random();
+		/*
 		if(seed == null)
 		{
 			a1 = new Random();
@@ -85,7 +87,7 @@ public class GenerateurBruitGaussien extends Transmetteur<Float,Float>{
 		{
 			a1 = new Random(seed);
 			a2 = new Random(seed);
-		}
+		}*/
 
 	
 		// on retourne le calul présenté dans les documents de TP3

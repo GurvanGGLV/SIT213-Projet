@@ -96,7 +96,7 @@ public class Simulateur {
 	private Boolean codage = false;
 
 	/** indique le type de forme pour le signal analogique */
-	private String form = "NRZ";
+	private String form = "RZ";
 	
 	
 	/** indique la présence de trajets multiples */
@@ -118,8 +118,6 @@ public class Simulateur {
 	 */
 	public Simulateur(String[] args) throws ArgumentsException {
 
-		
-		
 		// analyser et r�cup�rer les arguments
 		analyseArguments(args);
 
@@ -151,12 +149,13 @@ public class Simulateur {
 	
 				if (transBruitee == true) { // si la transmission est bruitée
 					// instanciation du générateur de bruit
-					GenerateurBruitGaussien generateurBruit;
+					GenerateurBruitGaussien generateurBruit = new GenerateurBruitGaussien(snr, ne);
+					/*
 					if (aleatoireAvecGerme) {
 						generateurBruit = new GenerateurBruitGaussien(snr, ne, seed);
 					} else {
 						generateurBruit = new GenerateurBruitGaussien(snr, ne);
-					}
+					}*/
 					
 					if(transMultiTraj == true) { // si la transmission subit des décalages
 						//instanciation du multi-trajet
@@ -318,13 +317,13 @@ public class Simulateur {
 				if (transBruitee == true) { // si la transmission est bruitée
 					// instanciation du générateur de bruit
 					
-					GenerateurBruitGaussien generateurBruit;
-					
+					GenerateurBruitGaussien generateurBruit = new GenerateurBruitGaussien(snr, ne);
+					/*
 					if (aleatoireAvecGerme) {
 						generateurBruit = new GenerateurBruitGaussien(snr, ne, seed);
 					} else {
 						generateurBruit = new GenerateurBruitGaussien(snr, ne);
-					}			
+					} */
 					
 					if(transMultiTraj == true) { // si la transmission subit des décalages
 						//instanciation du multi-trajet

@@ -170,8 +170,6 @@ public class EmetteurAnalogique extends Transmetteur<Boolean, Float> {
 		float pasP;
 		float pasN;
 		
-		//float pasP =
-		
 		int tVariation = 0;
 		int tMax = 0;
 		

@@ -37,7 +37,7 @@ public class GenerationCourbeTEBSNR {
 		// Boucle pour tester les trois codages
 		for (int indexCodages = 0; indexCodages<3 ; indexCodages++){
 			String typeCodage = codages[indexCodages]; // Prend la valeur des trois codage en fonction de la valeur de l'indexCodages
-			System.out.println("Génration des valeurs pour " + codages[indexCodages]);
+			System.out.println("Génération des valeurs pour " + codages[indexCodages]);
 			
 			final FileWriter writer = new FileWriter(fichiers+"/Gen"+typeCodage+".txt"); // permet de créer un fichier qui peut être écrit
 			
@@ -63,7 +63,7 @@ public class GenerationCourbeTEBSNR {
 				// On convertit la valeur du snrpb en String pour pouvoir la passer en argument du simulateur
 				String indexSNRString =	 String.valueOf(indexSNR);
 				// Arguments passés dans le simulateur
-				String[] arg = new String[]{"-mess","1000" , "-form",  typeCodage ,  "-ampl", "-2",  "2",  "-nbEch", "100" , "-snrpb" , indexSNRString };
+				String[] arg = new String[]{"-mess","10000" , "-form",  typeCodage ,  "-ampl", "-2",  "2",  "-nbEch", "100" , "-snrpb" , indexSNRString };
 
 				// Initialisation du simulateur avec les bon arguments
 				try {

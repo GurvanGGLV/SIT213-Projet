@@ -58,7 +58,6 @@ public class DecodageCanal extends Transmetteur<Boolean,Boolean> {
 		for(Iterator<Boolean> iterator = informationRecue.iterator() ; iterator.hasNext();) 
 		{
 			
-			
 			Boolean bit1 = iterator.next(); // etude sur le premier bit 
 			Boolean bit2 = iterator.next();	// etude sur le second bit
 			Boolean bit3 = iterator.next(); // etude sur le troisieme bit 

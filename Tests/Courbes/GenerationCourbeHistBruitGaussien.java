@@ -59,7 +59,7 @@ public class GenerationCourbeHistBruitGaussien {
 			float bruit; 
 			for(int i = 0; i<100000; i++) // on génère 100 000 valeurs de bruit
 			{
-				bruit = bruit1.calculBruit(sigma,null); //on calcule le bruit pour chaque valeur en fonction du sigma calculé (null pour la seed, verifier si on peut changer ca)
+				bruit = bruit1.calculBruit(sigma); //on calcule le bruit pour chaque valeur en fonction du sigma calculé (null pour la seed, verifier si on peut changer ca)
 				values[i] = Math.round(bruit); // On arrondi toutes nos valeurs de bruit et on les insérent dans le tableaux
 				writer.write(+ values[i] + " "); // On écrit dans le writer le TEB moyenné pour les nbSignaux pour chaque niveau de bruit snrpb en Db		
 			}
