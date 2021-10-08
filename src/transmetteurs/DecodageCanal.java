@@ -61,6 +61,7 @@ public class DecodageCanal extends Transmetteur<Boolean,Boolean> {
 			Boolean bit3 = iterator.next(); // etude sur le troisieme bit 
 			
 			Boolean[] tabBit = {bit1 , bit2 , bit3};
+			//System.out.println(bit1 + " " + bit2 + " " + bit3);
 			
 			// sachant qu'on a les 3 bits voulus, on les convertit en string pour les comparer
 			
@@ -100,8 +101,12 @@ public class DecodageCanal extends Transmetteur<Boolean,Boolean> {
 				informationDecodee.add(false);
 				break;
 
+			case "[true, true, true]":
+				informationDecodee.add(true);
 			}
-		}
+		} 
+			
+		System.out.println("Taille après décodage : " + informationDecodee.nbElements());
 		
 		for ( DestinationInterface<Boolean> destinationConnectee : destinationsConnectees) {
 			destinationConnectee.recevoir(informationDecodee);
