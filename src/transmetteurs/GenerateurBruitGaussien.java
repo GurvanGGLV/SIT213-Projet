@@ -29,7 +29,6 @@ public class GenerateurBruitGaussien extends Transmetteur<Float,Float>{
 	public void recevoir(Information<Float> information) throws InformationNonConformeException {
 		this.informationRecue = information;
 		this.emettre();
-		
 	}
 
 	public void emettre() throws InformationNonConformeException {

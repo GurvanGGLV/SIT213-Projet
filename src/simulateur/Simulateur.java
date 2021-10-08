@@ -319,11 +319,12 @@ public class Simulateur {
 					// instanciation du générateur de bruit
 					
 					GenerateurBruitGaussien generateurBruit;
+					
 					if (aleatoireAvecGerme) {
 						generateurBruit = new GenerateurBruitGaussien(snr, ne, seed);
 					} else {
 						generateurBruit = new GenerateurBruitGaussien(snr, ne);
-					}					
+					}			
 					
 					if(transMultiTraj == true) { // si la transmission subit des décalages
 						//instanciation du multi-trajet
