@@ -167,8 +167,8 @@ public class EmetteurAnalogique extends Transmetteur<Boolean, Float> {
 		informationAnalogique = new Information<Float>();
 
 		// définition des valeurs de pas
-		float pasP = calculPasPositif(nEch, max); // ne change pas si nEch est multiple de 3
-		float pasN = calculPasNegatif(nEch, min); // ne change pas si nEch est multiple de 3
+		float pasP;
+		float pasN;
 		
 		//float pasP =
 		
@@ -182,6 +182,8 @@ public class EmetteurAnalogique extends Transmetteur<Boolean, Float> {
 		if (modulo == 0) { // si nEch est un multiple de 3, alors tous les tBits sont égaux
 			tVariation = (int)dist; // alors on converti en int et on assigne
 			tMax = (int)dist;
+			pasP = calculPasPositif(tVariation,max);
+			pasN = calculPasPositif(tVariation,min);
 		} else {
 			int rounded = Math.round(dist); // l'opération qui vient change suivant la valeur de rounded (si elle est < ou > à dist)
 			if (rounded < dist) {
