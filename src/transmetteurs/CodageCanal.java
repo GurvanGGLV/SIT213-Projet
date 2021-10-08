@@ -27,8 +27,6 @@ public class CodageCanal extends Transmetteur<Boolean,Boolean> {
 	public CodageCanal() {
 	}
 	
-	
-
 	public void recevoir(Information<Boolean> information) throws InformationNonConformeException {
 		this.informationRecue = information;
 		this.emettre();
