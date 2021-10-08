@@ -152,8 +152,6 @@ public class Simulateur {
 				if (transBruitee == true) { // si la transmission est bruitée
 					// instanciation du générateur de bruit
 					GenerateurBruitGaussien generateurBruit;
-					System.out.println("seed value " + seed);
-					System.out.println();
 					if (aleatoireAvecGerme) {
 						generateurBruit = new GenerateurBruitGaussien(snr, ne, seed);
 					} else {
@@ -319,7 +317,13 @@ public class Simulateur {
 	
 				if (transBruitee == true) { // si la transmission est bruitée
 					// instanciation du générateur de bruit
-					GenerateurBruitGaussien generateurBruit = new GenerateurBruitGaussien(snr, ne, seed);					
+					
+					GenerateurBruitGaussien generateurBruit;
+					if (aleatoireAvecGerme) {
+						generateurBruit = new GenerateurBruitGaussien(snr, ne, seed);
+					} else {
+						generateurBruit = new GenerateurBruitGaussien(snr, ne);
+					}					
 					
 					if(transMultiTraj == true) { // si la transmission subit des décalages
 						//instanciation du multi-trajet
