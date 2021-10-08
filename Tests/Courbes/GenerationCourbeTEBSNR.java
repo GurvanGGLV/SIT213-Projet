@@ -63,7 +63,7 @@ public class GenerationCourbeTEBSNR {
 				// On convertit la valeur du snrpb en String pour pouvoir la passer en argument du simulateur
 				String indexSNRString =	 String.valueOf(indexSNR);
 				// Arguments passés dans le simulateur
-				String[] arg = new String[]{"-mess","10000" , "-form",  typeCodage ,  "-ampl", "-2",  "2",  "-nbEch", "100" , "-snrpb" , indexSNRString };
+				String[] arg = new String[]{"-mess","3000" , "-form",  typeCodage ,  "-ampl", "-2",  "2",  "-nbEch", "11" , "-snrpb" , indexSNRString };
 
 				// Initialisation du simulateur avec les bon arguments
 				try {

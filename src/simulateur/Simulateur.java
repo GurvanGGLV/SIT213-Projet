@@ -627,7 +627,7 @@ public class Simulateur {
 		Information<Boolean> informationInitiale = source.getInformationEmise();
 		Information<Boolean> informationFinale = destination.getInformationRecue();
 		
-		System.out.println("S " + informationInitiale.nbElements() + " : " + "E " +informationFinale.nbElements());
+	//	System.out.println("S " + informationInitiale.nbElements() + " : " + "E " +informationFinale.nbElements());
 		int pos = 0;
 		for(boolean infS : informationInitiale) {
 			if (infS != informationFinale.iemeElement(pos)) {
