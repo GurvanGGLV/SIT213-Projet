@@ -329,14 +329,15 @@ public class Simulateur {
 					if(transMultiTraj == true) { // si la transmission subit des décalages
 						//instanciation du multi-trajet
 						EmetteurMultiTrajets emetteurMT = new EmetteurMultiTrajets(listTaus, listAlphas);
-						RecepteurMultiTrajets recepteurMT = new RecepteurMultiTrajets(listTaus, listAlphas);
+						//RecepteurMultiTrajets recepteurMT = new RecepteurMultiTrajets(listTaus, listAlphas);
 						
 						//connexion des différents éléments du système
 						source.connecter(emetteurAnalogique);
 						emetteurAnalogique.connecter(emetteurMT);
 						emetteurMT.connecter(generateurBruit);
-						generateurBruit.connecter(recepteurMT);
-						recepteurMT.connecter(decodeurAnalogique);
+						//generateurBruit.connecter(recepteurMT);
+						generateurBruit.connecter(decodeurAnalogique);
+						//recepteurMT.connecter(decodeurAnalogique);
 						decodeurAnalogique.connecter(destination);
 						
 						if (affichage == true) { //si l'on souhaite afficher les graphes
@@ -355,7 +356,7 @@ public class Simulateur {
 							generateurBruit.connecter(sondeB);
 							decodeurAnalogique.connecter(sondeC);
 							emetteurMT.connecter(sondeEMT);
-							recepteurMT.connecter(sondeRMT);
+							//recepteurMT.connecter(sondeRMT);
 						}
 						
 					} else { // si la transmission ne subit pas de décalage
@@ -558,7 +559,7 @@ public class Simulateur {
 					}
 					
 					i++;
-					if(args[i].matches("0[.][0-9]+"))
+					if(args[i].matches("0[.][0-9]+|1"))
 					{
 						try {
 							listAlphas.add(Float.valueOf(args[i]));
