@@ -160,15 +160,15 @@ public class Simulateur {
 					if(transMultiTraj == true) { // si la transmission subit des décalages
 						//instanciation du multi-trajet
 						EmetteurMultiTrajets emetteurMT = new EmetteurMultiTrajets(listTaus, listAlphas);
-						RecepteurMultiTrajets recepteurMT = new RecepteurMultiTrajets(listTaus, listAlphas);
+						//RecepteurMultiTrajets recepteurMT = new RecepteurMultiTrajets(listTaus, listAlphas);
 						
 						//connexion des différents éléments du système
 						source.connecter(codageCanal);
 						codageCanal.connecter(emetteurAnalogique);
 						emetteurAnalogique.connecter(emetteurMT);
 						emetteurMT.connecter(generateurBruit);
-						generateurBruit.connecter(recepteurMT);
-						recepteurMT.connecter(decodeurAnalogique);
+						generateurBruit.connecter(decodeurAnalogique);
+						//recepteurMT.connecter(decodeurAnalogique);
 						decodeurAnalogique.connecter(decodageCanal);
 						decodageCanal.connecter(destination);
 						
@@ -190,7 +190,7 @@ public class Simulateur {
 							generateurBruit.connecter(sondeB);
 							decodeurAnalogique.connecter(sondeC);
 							emetteurMT.connecter(sondeEMT);
-							recepteurMT.connecter(sondeRMT);
+							//recepteurMT.connecter(sondeRMT);
 							codageCanal.connecter(sondeCodage);
 							decodageCanal.connecter(sondeDeodage);
 						}
@@ -341,7 +341,7 @@ public class Simulateur {
 						decodeurAnalogique.connecter(destination);
 						
 						if (affichage == true) { //si l'on souhaite afficher les graphes
-	
+							
 							// Création des sondes
 							Sonde<Boolean> sondeL = new SondeLogique("Signal Source", 10);
 							Sonde<Float> sondeE = new SondeAnalogique("Signal Analogique Entree");
