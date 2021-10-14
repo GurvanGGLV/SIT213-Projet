@@ -26,9 +26,12 @@ import information.InformationNonConformeException;
 
 public class DecodageCanal extends Transmetteur<Boolean,Boolean> {
 	
-	
+	// liste qui va contenir le signal décodé
 	protected Information<Boolean> informationDecodee;
 	
+	/**
+	 * Constructeur de la classe qui initialise la liste informationDecodee
+	 */
 	public DecodageCanal() {
 		informationDecodee = null;
 	}
@@ -46,7 +49,6 @@ public class DecodageCanal extends Transmetteur<Boolean,Boolean> {
 	 * Elle sera ensuite envoyée à l'élément destination de la chaine de transmission.
 	 * 
 	 */
-	
 	public void emettre() throws InformationNonConformeException {
 		
 		informationDecodee = new Information<Boolean>();
@@ -105,7 +107,7 @@ public class DecodageCanal extends Transmetteur<Boolean,Boolean> {
 				informationDecodee.add(true);
 			}
 		} 
-		
+		// on envoie le signal décodé
 		for ( DestinationInterface<Boolean> destinationConnectee : destinationsConnectees) {
 			destinationConnectee.recevoir(informationDecodee);
 		}

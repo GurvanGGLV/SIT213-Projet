@@ -7,7 +7,7 @@ package transmetteurs;
  * 							  des methodes de transmission de l'information. Elle a pour but de formater l'information numerique
  * 							  en une information analogique.
  * 
- * Version 					: 1.0
+ * Version					: 1.0
  * 
  * Date 					: 19/09/2021
  * 
@@ -57,9 +57,6 @@ public class EmetteurAnalogique extends Transmetteur<Boolean, Float> {
 			nRZT(nEch, max, min);
 		} // continuer pour les autres encodages
 
-		// DEBUG
-		// int size = informationAnalogique.nbElements();
-
 		if (forme.equalsIgnoreCase("NRZ")) {
 			NRZ(nEch, max, min);
 		}
@@ -86,7 +83,6 @@ public class EmetteurAnalogique extends Transmetteur<Boolean, Float> {
 	 * @throws InformationNonConformeException
 	 * 
 	 */
-
 	public void NRZ(int nEch, float max, float min) throws InformationNonConformeException {
 
 		informationAnalogique = new Information<Float>();
@@ -118,7 +114,6 @@ public class EmetteurAnalogique extends Transmetteur<Boolean, Float> {
 	 * @throws InformationNonConformeException
 	 * 
 	 */
-
 	public void RZ(int nEch, float max) throws InformationNonConformeException {
 
 		informationAnalogique = new Information<Float>();
@@ -129,16 +124,16 @@ public class EmetteurAnalogique extends Transmetteur<Boolean, Float> {
 		int tVariation;
 		int tMax;
 
-		int modulo = nEch % 3; // on vérifie si c'est un multiple de 3 avant d'appliquer les opérations
+		int modulo = nEch % 3; // on verifie si c'est un multiple de 3 avant d'appliquer les operations
 
 		float dist = (float) nEch / 3f;
 
-		if (modulo == 0) { // si nEch est un multiple de 3, alors tous les tBits sont égaux
+		if (modulo == 0) { // si nEch est un multiple de 3, alors tous les tBits sont egaux
 			tVariation = (int) dist; // alors on converti en int et on assigne
 			tMax = (int) dist;
 			pasP = calculPasPositif(tVariation, max);
 		} else {
-			int rounded = Math.round(dist); // l'opération qui vient change suivant la valeur de rounded (si elle est <
+			int rounded = Math.round(dist); // l'operation qui vient change suivant la valeur de rounded (si elle est <
 											// ou > à dist)
 			if (rounded < dist) {
 				tVariation = rounded;
@@ -184,35 +179,34 @@ public class EmetteurAnalogique extends Transmetteur<Boolean, Float> {
 	 * @throws InformationNonConformeException
 	 * 
 	 */
-
 	public void nRZT(int nEch, float max, float min) throws InformationNonConformeException {
 
 		// IL FAUT PASSER EN INT QUAND ON EST PAS UN MULTIPLE DE 3.
 		// EX : 50/3 = 16,67 alors tMonte = 17 tMax = 16
 		// EX2 : 70/3 = 23,3 alors tMonte = 23 tMax = 24
-		// si la première decimale est en dessous de 5 ou au dessus on change
-		// l'opération
+		// si la premiere decimale est en dessous de 5 ou au dessus on change
+		// l'operation
 
 		informationAnalogique = new Information<Float>();
 
-		// définition des valeurs de pas
+		// definition des valeurs de pas
 		float pasP;
 		float pasN;
 
 		int tVariation = 0;
 		int tMax = 0;
 
-		int modulo = nEch % 3; // on vérifie si c'est un multiple de 3 avant d'appliquer les opérations
+		int modulo = nEch % 3; // on verifie si c'est un multiple de 3 avant d'appliquer les operations
 
 		float dist = (float) nEch / 3f;
 
-		if (modulo == 0) { // si nEch est un multiple de 3, alors tous les tBits sont égaux
+		if (modulo == 0) { // si nEch est un multiple de 3, alors tous les tBits sont egaux
 			tVariation = (int) dist; // alors on converti en int et on assigne
 			tMax = (int) dist;
 			pasP = calculPasPositif(tVariation, max);
 			pasN = calculPasPositif(tVariation, min);
 		} else {
-			int rounded = Math.round(dist); // l'opération qui vient change suivant la valeur de rounded (si elle est <
+			int rounded = Math.round(dist); // l'operation qui vient change suivant la valeur de rounded (si elle est <
 											// ou > à dist)
 			if (rounded < dist) {
 				tVariation = rounded;
@@ -227,29 +221,25 @@ public class EmetteurAnalogique extends Transmetteur<Boolean, Float> {
 			}
 		}
 
-		// Iterator<Boolean> bitCourant = informationRecue.iterator(); // pas besoin au
-		// final
-
-		// codage avec for each
-		int position = 0; // sert à savoir où l'on est dans informationRecue
+		int position = 0; // sert a savoir ou l'on est dans informationRecue
 		for (boolean b : informationRecue) {
-			// on prend le cas où il n'y a qu'un bit
+			// on prend le cas ou il n'y a qu'un bit
 			if (informationRecue.nbElements() == 1) {
 				// on regarde la valeur du bit
 				if (b == true) {
 					float init = 0;
-					for (int j = 0; j < tVariation; j++) {
+					for (int j = 0; j < tVariation; j++) { // front montant
 						informationAnalogique.add(init);
 						init += pasP;
 					}
-					for (int j = 0; j < tMax; j++) {
+					for (int j = 0; j < tMax; j++) { // valeur max sur 1/3 tBit
 						informationAnalogique.add(max);
 					}
-					for (int j = 0; j < tVariation; j++) {
+					for (int j = 0; j < tVariation; j++) { // front descendant
 						init -= pasP;
 						informationAnalogique.add(init);
 					}
-				} else if (b == false) {
+				} else if (b == false) { // on fait dans l'autre sens si c'est un false
 					float init = 0;
 					for (int j = 0; j < tVariation; j++) {
 						informationAnalogique.add(init);
@@ -264,33 +254,32 @@ public class EmetteurAnalogique extends Transmetteur<Boolean, Float> {
 					}
 				}
 			}
-
-			// sinon on traite différemment la liste
+			// sinon on traite differemment la liste
 			else {
 				int bitPrec = position - 1;
-				if (position == 0) { // on regarde pour la première position
-					if (b == true) { // réception d'un bit positif
+				if (position == 0) { // on regarde pour la premiere position
+					if (b == true) { // reception d'un bit positif
 						float init = 0;
-						for (int j = 0; j < tVariation; j++) { // montée
+						for (int j = 0; j < tVariation; j++) { // montee
 							init += pasP;
 							informationAnalogique.add(init);
 						}
 						for (int j = 0; j < tMax; j++) { // valeur max 1/3 tbit
 							informationAnalogique.add(max);
 						}
-					} else if (b == false) { // réception d'un bit négatif
+					} else if (b == false) { // reception d'un bit negatif
 						float init = 0;
-						for (int j = 0; j < tVariation; j++) { // on passe de 0 à min
+						for (int j = 0; j < tVariation; j++) { // on passe de 0 a min
 							init += pasN;
 							informationAnalogique.add(init);
 						}
-						for (int j = 0; j < tMax; j++) { // plafond à min
+						for (int j = 0; j < tMax; j++) { // plafond a min
 							informationAnalogique.add(init);
 						}
 					}
-				} else if (position != 0) { // si on est entre le début et la fin (-1?)
+				} else if (position != 0) { // si on est entre le debut et la fin
 					if (b == true) { // on reçoit un bit positif
-						if (informationRecue.iemeElement(bitPrec) == b) { // si le bit d'avant était positif également
+						if (informationRecue.iemeElement(bitPrec) == b) { // si le bit d'avant etait positif egalement
 							for (int j = 0; j < tVariation; j++) { // on laisse 3 paliers de max
 								informationAnalogique.add(max);
 							}
@@ -300,15 +289,15 @@ public class EmetteurAnalogique extends Transmetteur<Boolean, Float> {
 							for (int j = 0; j < tMax; j++) { // 3/3
 								informationAnalogique.add(max);
 							}
-						} else if (informationRecue.iemeElement(bitPrec) != b) { // si le bit précédent était
-																					// négatif
+						} else if (informationRecue.iemeElement(bitPrec) != b) { // si le bit precedent etait
+																					// negatif
 							float init = min; // on se place à min
 							for (int j = 0; j < tVariation; j++) { // on remonte la pente sur 1/3 tBit
 								init -= pasN;
 								informationAnalogique.add(init);
 							}
-							init = 0; // on se place à 0
-							for (int j = 0; j < tVariation; j++) { // on monte jusqu'à max sur 1/3 tBit
+							init = 0; // on se place a 0
+							for (int j = 0; j < tVariation; j++) { // on monte jusqu'a max sur 1/3 tBit
 								init += pasP;
 								informationAnalogique.add(init);
 							}
@@ -317,8 +306,8 @@ public class EmetteurAnalogique extends Transmetteur<Boolean, Float> {
 							}
 						}
 					} else if (b == false) { // si l'on reçoit un bit 0
-						if (informationRecue.iemeElement(bitPrec) == b) { // et que le précédent était 0 aussi
-							for (int j = 0; j < tVariation; j++) { // on reste à min 1/3
+						if (informationRecue.iemeElement(bitPrec) == b) { // et que le precedent etait 0 aussi
+							for (int j = 0; j < tVariation; j++) { // on reste a min 1/3
 								informationAnalogique.add(min);
 							}
 							for (int j = 0; j < tVariation; j++) { // 2/3
@@ -327,35 +316,35 @@ public class EmetteurAnalogique extends Transmetteur<Boolean, Float> {
 							for (int j = 0; j < tMax; j++) { // 3/3
 								informationAnalogique.add(min);
 							}
-						} else if (informationRecue.iemeElement(bitPrec) != b) { // si le précédent était un 1
+						} else if (informationRecue.iemeElement(bitPrec) != b) { // si le precedent etait un 1
 							float init = max;
-							for (int j = 0; j < tVariation; j++) { // on redescend jusq'à 0
+							for (int j = 0; j < tVariation; j++) { // on redescend jusqu'a 0
 								init -= pasP;
 								informationAnalogique.add(init);
 
 							}
 							// init=0; // on se place bien à 0
-							for (int j = 0; j < tVariation; j++) { // on descend jusqu'à min 1/3 tBit
+							for (int j = 0; j < tVariation; j++) { // on descend jusqu'a min 1/3 tBit
 								init += pasN;
 								informationAnalogique.add(init);
 							}
 							for (int j = 0; j < tMax; j++) {
-								informationAnalogique.add(init); // on reste ensuite à min pendant 1/3 tBit
+								informationAnalogique.add(init); // on reste ensuite a min pendant 1/3 tBit
 							}
 						}
 					}
 				}
 			}
 			position++;
-			if (position == informationRecue.nbElements()) { // quand on est au dernier élément
-				if (informationRecue.iemeElement(position - 1) == true) { // on regarde si on était à 1
-					// alors on redescend jusqu'à 0
+			if (position == informationRecue.nbElements()) { // quand on est au dernier element
+				if (informationRecue.iemeElement(position - 1) == true) { // on regarde si on etait à 1
+					// alors on redescend jusqu'a 0
 					float init = max;
 					for (int j = 0; j < tVariation; j++) {
 						init -= pasP;
 						informationAnalogique.add(init);
 					}
-				} else { // sinon on était à 0
+				} else { // sinon on etait a 0
 					// et il faut remonter
 					float init = min;
 					for (int j = 0; j < tVariation; j++) {
@@ -368,11 +357,11 @@ public class EmetteurAnalogique extends Transmetteur<Boolean, Float> {
 	}
 
 	/**
-	 * Cette méthode permet de calculer pour true la valeur du pas
+	 * Cette methode permet de calculer pour true la valeur du pas
 	 * 
 	 * @param max  - valeur du maximum qu'atteindra la valeur float pour true
-	 * @param tVar - nombre d'échantillons du tier tBit montant
-	 * @return - un float étant la valeur du pas
+	 * @param tVar - nombre d'echantillons du tier tBit montant
+	 * @return - un float etant la valeur du pas
 	 */
 	public float calculPasPositif(int tVar, float max) {
 
@@ -380,11 +369,11 @@ public class EmetteurAnalogique extends Transmetteur<Boolean, Float> {
 	}
 
 	/**
-	 * Cette méthode permet de calculer pour true la valeur du pas
+	 * Cette methode permet de calculer pour true la valeur du pas
 	 * 
 	 * @param max  - valeur du maximum qu'atteindra la valeur float pour true
-	 * @param tVar - nombre d'échantillons du tier tBit montant
-	 * @return - un float étant la valeur du pas
+	 * @param tVar - nombre d'echantillons du tier tBit montant
+	 * @return - un float etant la valeur du pas
 	 */
 	public float calculPasNegatif(int tVar, float min) {
 

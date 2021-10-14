@@ -25,21 +25,25 @@ import transmetteurs.EmetteurAnalogique;
 public class DecodeurAnalogique extends Transmetteur<Float, Boolean> 
 {
 
-	private String forme;
-	private int nEch;
-	private float min;
-	private float max;
-	protected Information<Boolean> informationNumerique;
+	private String forme; // va nous permettre de choisir le type de décodage
+	private int nEch; // sert aux calculs
+	private float min; // sert aux calculs
+	private float max; // sert aux calculs
+	protected Information<Boolean> informationNumerique; // va contenir l'information decodee
 	
-	private double esperance;
-	private double somme = 0;
+	private double esperance; // variable nous servant a faire de la prise de decision
+	private double somme = 0; // cette variable va contenir la somme de tous les échantillons sur un tBit
 	private int compteurEch = 0;
-	//private int i = 0;
 	
+	/**
+	 * Constructeur de la classe qui initialise les variables grace aux parametres ci dessous
+	 * @param forme
+	 * @param nEch
+	 * @param min
+	 * @param max
+	 */
 	public DecodeurAnalogique(String forme, int nEch, float min, float max) 
-	{
-		//super();
-		
+	{	
 		this.forme = forme;
 		this.nEch = nEch;
 		this.min = min;
@@ -54,7 +58,7 @@ public class DecodeurAnalogique extends Transmetteur<Float, Boolean>
 	}
 
 	public void emettre() throws InformationNonConformeException 
-	{
+	{	// il faut choisir quel decodeur va etre utilise
 		if (forme.equalsIgnoreCase("NRZT") || forme.equalsIgnoreCase("NRZ")) 
 		{
 			decodeur(nEch);
@@ -74,7 +78,7 @@ public class DecodeurAnalogique extends Transmetteur<Float, Boolean>
 	
 	
 	/**
-	 * La methode decodeur permet de décoder l'information analogique reçue et codée par le code en ligne NRZT ou NRZ (No Return to Zero). 
+	 * La methode decodeur permet de decoder l'information analogique reçue et codee par le code en ligne NRZT ou NRZ (No Return to Zero). 
 	 * Pour cela, on fixe un seuil à la valeur (max + min)/2 puis on calcule la valeur moyenne de chaque bit reçu. Si celle-ci est
 	 * au dessus du seuil, le bit reçu est 1, sinon c'est un 0.
 	 *  
@@ -82,19 +86,19 @@ public class DecodeurAnalogique extends Transmetteur<Float, Boolean>
 	 * @throws InformationNonConformeException
 	 * 
 	 */
-	
 	public void decodeur(int nEch) throws InformationNonConformeException 
 	{
 		informationNumerique = new Information <Boolean> ();
 		
+		// on parcours l'information
 		for (double echantillon : informationRecue)
 		{
-			compteurEch++;
+			compteurEch++; 
 			somme += echantillon;
 			
-			if (compteurEch == nEch)
+			if (compteurEch == nEch) // lorsque que l'on est passe sur un bit  on peut prendre la decision qui convient
 			{	
-				if (somme/nEch > esperance)
+				if (somme/nEch > esperance) // si la moyenne est superieure a l'esperance on met un true, false sinon
 					informationNumerique.add(true);
 				
 				else
@@ -109,7 +113,7 @@ public class DecodeurAnalogique extends Transmetteur<Float, Boolean>
 	}
 	
 	/**
-	 * La methode decodRZ permet de décoder l'information analogique reçue et codée par le code en ligne RZ (Return to Zero). 
+	 * La methode decodRZ permet de decoder l'information analogique reçue et codee par le code en ligne RZ (Return to Zero). 
 	 * Pour cela, on fixe un seuil à la valeur max/3 puis on calcule la valeur moyenne de chaque bit reçu. Si celle-ci est
 	 * au dessus du seuil, le bit reçu est 1, sinon c'est un 0.
 	 *  
@@ -118,11 +122,11 @@ public class DecodeurAnalogique extends Transmetteur<Float, Boolean>
 	 * @throws InformationNonConformeException
 	 * 
 	 */
-	
 	public void decodRZ(int nEch, float max) throws InformationNonConformeException
 	{
 		informationNumerique = new Information <Boolean> ();
 
+		// meme systeme que pour l'autre methode
 		for (float echantillon : informationRecue)
 		{
 			compteurEch++;
@@ -130,7 +134,7 @@ public class DecodeurAnalogique extends Transmetteur<Float, Boolean>
 			
 			if (compteurEch == nEch)
 			{
-	            if((somme/(nEch/3) > (max/2))) {
+	            if((somme/(nEch/3) > (max/2))) { // la prise de decision est differente car 2/3 tBit sont a 0
 					informationNumerique.add(true);
 	            } else {
 					informationNumerique.add(false);

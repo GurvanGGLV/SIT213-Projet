@@ -8,7 +8,7 @@ import information.InformationNonConformeException;
 
 public class GenerateurBruitGaussien extends Transmetteur<Float,Float>{
 
-	private int nbEch; // représente N = Te*Fe
+	private int nbEch; // represente N = Te*Fe
 	private float snr; // snr en dB
 	//private int seed;
 	protected Information<Float> informationBruitee;
@@ -20,7 +20,11 @@ public class GenerateurBruitGaussien extends Transmetteur<Float,Float>{
 		this.seed = seed;
 		informationBruitee = null;
 	}*/
-	
+	/**
+	 * Constructeur de la classe, initialise les variables
+	 * @param snr
+	 * @param nEch
+	 */
 	public GenerateurBruitGaussien(float snr, int nEch) {
 		this.nbEch = nEch;
 		this.snr = snr;
@@ -31,7 +35,10 @@ public class GenerateurBruitGaussien extends Transmetteur<Float,Float>{
 		this.informationRecue = information;
 		this.emettre();
 	}
-
+	
+	/*
+	 * Methode qui permet d'effectuer les calculs necessaires 
+	 */
 	public void emettre() throws InformationNonConformeException {
 		
 		informationBruitee = new Information<Float>();
@@ -41,7 +48,7 @@ public class GenerateurBruitGaussien extends Transmetteur<Float,Float>{
 		
 		// on ajoute le bruit au signal
 		for(float s : informationRecue) {
-			s+=calculBruit(sigma); // le float courant + le bruit calculé à cet instant
+			s+=calculBruit(sigma); // le float courant + le bruit calcule a cet instant
 			informationBruitee.add(s); // on remplit informationBruitee
 		}
 		
@@ -52,11 +59,11 @@ public class GenerateurBruitGaussien extends Transmetteur<Float,Float>{
 	}
 	
 	/**
-	 * Cette méthode permet de calculer la puissance du signal (1/K * somme(s(n)²))
+	 * Cette methode permet de calculer la puissance du signal (1/K * somme(s(n)²))
 	 * @param informationAnalogique
-	 * 		- le signal dont la puissance sera calculée
+	 * 		- le signal dont la puissance sera calculee
 	 * @return
-	 * 		-puissanceMoyenneSignal : la puissance calculée
+	 * 		-puissanceMoyenneSignal : la puissance calculee
 	 */
 	public float calculPuissance(Information<Float> informationAnalogique) {
 		
@@ -74,7 +81,7 @@ public class GenerateurBruitGaussien extends Transmetteur<Float,Float>{
 
 	public float calculBruit(float sigmaB) {
 		
-		// création de 2 variables aléatoire uniformes
+		// creation de 2 variables aleatoire uniformes
 		Random a1 = new Random();
 		Random a2 = new Random();
 		/*
@@ -90,7 +97,7 @@ public class GenerateurBruitGaussien extends Transmetteur<Float,Float>{
 		}*/
 
 	
-		// on retourne le calul présenté dans les documents de TP3
+		// on retourne le calul presente dans les documents de TP3
 		return (float)(sigmaB*Math.sqrt(-2*Math.log(1-a1.nextFloat()))*Math.cos(2*Math.PI*a2.nextFloat()));
 	}
 		
@@ -98,7 +105,7 @@ public class GenerateurBruitGaussien extends Transmetteur<Float,Float>{
 		
 		float sigma;
 		
-		// on récupère la puissance moyenne du signal
+		// on recupere la puissance moyenne du signal
 		float ps = calculPuissance(informationRecue);
 		
 		// on passe en log le snr pour effectuer le calcul

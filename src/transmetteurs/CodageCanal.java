@@ -24,9 +24,15 @@ public class CodageCanal extends Transmetteur<Boolean,Boolean> {
 
 	private Information<Boolean> informationCodee;
 	
+	/**
+	 * Constructeur de la classe
+	 */
 	public CodageCanal() {
 	}
 	
+	/**
+	 * Méthode qui s'occupe de recevoir l'information de la classe utilisée précédemment
+	 */
 	public void recevoir(Information<Boolean> information) throws InformationNonConformeException {
 		this.informationRecue = information;
 		this.emettre();
@@ -39,11 +45,11 @@ public class CodageCanal extends Transmetteur<Boolean,Boolean> {
 	 * de transmission.
 	 * 
 	 */
-	
 	public void emettre() throws InformationNonConformeException {
 		
 		informationCodee = new Information<Boolean>();
 		
+		// on ajoute soit 010 soit 101 suivant le bit qui est reçu (CDC)
 		for(Boolean bitCurrent : informationRecue) {
 			if (bitCurrent) {
 				informationCodee.add(true);
@@ -55,7 +61,7 @@ public class CodageCanal extends Transmetteur<Boolean,Boolean> {
 				informationCodee.add(false);
 			}
 		}
-		
+		// puis on envoie l'information codée
 		for ( DestinationInterface<Boolean> destinationConnectee : destinationsConnectees) {
 			destinationConnectee.recevoir(informationCodee);
 		}

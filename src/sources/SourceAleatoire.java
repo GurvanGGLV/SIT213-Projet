@@ -4,6 +4,16 @@ import java.util.Random;
 
 import information.Information;
 
+/**
+ * Nom de classe 			: SourceAleatoire
+ * 
+ * Description 				: Cette classe produit un signal aléatoire, suivant une seed ou non
+ * 
+ * Date 					: 14/10/2021
+ * 
+ * Copyright 				: Gurvan, Christopher, Alexandre, Aurelien Promotion 2023 FIP 2A
+ * 
+ */
 public class SourceAleatoire extends Source<Boolean> {
 
 	private Random r;
