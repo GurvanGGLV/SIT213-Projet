@@ -6,7 +6,7 @@ import information.InformationNonConformeException;
 /**
  * Nom de classe 			: DestinationFinale
  * 
- * Description 				: Cette classe est celle qui reçoit l'information finale après passage dans tous les blocs
+ * Description 				: Cette classe est celle qui reçoit l'information finale apres passage dans tous les blocs
  * 
  * Version 					: 2.0
  * 

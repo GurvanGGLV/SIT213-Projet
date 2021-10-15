@@ -8,7 +8,7 @@ import information.InformationNonConformeException;
 
 /**
  * Cette classe va permettre de recuperer les amplitudes et decalages associes aux multi trajets
- * definis en arguments, et de proceder à l'emission en mode multi trajet du signal recue.
+ * definis en arguments, et de proceder a l'emission en mode multi trajet du signal recue.
  * @author ggurv
  *
  */
@@ -62,14 +62,14 @@ public class EmetteurMultiTrajets extends Transmetteur<Float,Float>{
 		// on veut maintenant respecter r(t) = s(t) +Aks(t-Tk) + b(t) , k appartenant a
 		// [|0;5|]
 
-		// alphaCourant va nous servir à recuperer le alpha correspondant au decalage
+		// alphaCourant va nous servir a recuperer le alpha correspondant au decalage
 		// observe
 		int alphaCourant = 0;
 
 		for (int tau : listTaus) { // on va recuperer le signal initial, et le rajouter par decalage
 			// dans le signal mutli trajet
 			for (int pos = 0; pos <=informationTi.nbElements(); pos++) {
-				if (pos >= tau && pos < informationRecue.nbElements()+tau) { // quand l'on atteint le premier décalage
+				if (pos >= tau && pos < informationRecue.nbElements()+tau) { // quand l'on atteint le premier decalage
 					// on recupere la valeur de l'echantillon actuel
 					float echCourant = informationTi.iemeElement(pos);
 					// on recupere le premier echantillon equivalent dans le signal recu de base

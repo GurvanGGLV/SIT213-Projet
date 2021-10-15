@@ -7,7 +7,7 @@ import information.Information;
 /**
  * Nom de classe 			: SourceAleatoire
  * 
- * Description 				: Cette classe produit un signal aléatoire, suivant une seed ou non
+ * Description 				: Cette classe produit un signal aleatoire, suivant une seed ou non
  * 
  * Date 					: 14/10/2021
  * 
@@ -31,8 +31,8 @@ public class SourceAleatoire extends Source<Boolean> {
 			
 			r = new Random(seed);
 		}
-		// enlever les tests car déjà faits dans analyse arguments
-		// il faut v�rifier si c'est une seed, si c'est la longueur du message, ou si c'est 100 par d�faut
+		// enlever les tests car deja faits dans analyse arguments
+		// il faut verifier si c'est une seed, si c'est la longueur du message, ou si c'est 100 par defaut
 		if ( longueurMessage.equalsIgnoreCase("100") ) {
 			for ( int i=0 ; i<100 ; i++) {
 				informationGeneree.add(r.nextBoolean());
@@ -42,7 +42,7 @@ public class SourceAleatoire extends Source<Boolean> {
 				informationGeneree.add(r.nextBoolean());
 			}
 		} else if (longueurMessage.length() > 6) {
-			System.out.println("La longueur de message entr�e n'est pas correct (doit �tre <= 6");
+			System.out.println("La longueur de message entree n'est pas correct (doit etre <= 6");
 		}
 		//System.out.println(informationGeneree.toString());
 	}

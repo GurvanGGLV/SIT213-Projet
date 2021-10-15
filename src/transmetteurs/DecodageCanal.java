@@ -5,7 +5,7 @@ package transmetteurs;
  * 
  * Description 				: Cette classe se compose des methodes recevoir() et emettre() ainsi que 
  * 							  d'une methode de decodage de l'information. Elle a pour but deformater l'information numerique
- * 							  codée en une information analogiqu.
+ * 							  codee en une information analogiqu.
  * 
  * Version 					: 1.0
  * 
@@ -26,7 +26,7 @@ import information.InformationNonConformeException;
 
 public class DecodageCanal extends Transmetteur<Boolean,Boolean> {
 	
-	// liste qui va contenir le signal décodé
+	// liste qui va contenir le signal decode
 	protected Information<Boolean> informationDecodee;
 	
 	/**
@@ -42,18 +42,18 @@ public class DecodageCanal extends Transmetteur<Boolean,Boolean> {
 	}
 
 	/** 
-	 * La méthode emettre() de cette classe deformate l'information numérique après décodage de celle ci par 
-	 * le transmetteur adapté.
-	 * Elle transforme ainsi cette information en l'information numérique utile.
-	 * L'attribut <informationDecodee> est instancié pour stocker les valeurs correspondantes des bits.
-	 * Elle sera ensuite envoyée à l'élément destination de la chaine de transmission.
+	 * La methode emettre() de cette classe deformate l'information numerique apres decodage de celle ci par 
+	 * le transmetteur adapte.
+	 * Elle transforme ainsi cette information en l'information numerique utile.
+	 * L'attribut <informationDecodee> est instancie pour stocker les valeurs correspondantes des bits.
+	 * Elle sera ensuite envoyee a l'element destination de la chaine de transmission.
 	 * 
 	 */
 	public void emettre() throws InformationNonConformeException {
 		
 		informationDecodee = new Information<Boolean>();
 		
-		// la méthode has.next() permet de parcourir la trame d'information numérique.
+		// la methode has.next() permet de parcourir la trame d'information numerique.
 		
 		for(Iterator<Boolean> iterator = informationRecue.iterator() ; iterator.hasNext();) 
 		{
@@ -70,9 +70,9 @@ public class DecodageCanal extends Transmetteur<Boolean,Boolean> {
 			String tabBitString = Arrays.toString(tabBit);
 			
 			// la structure "switch case" nous permettra d'effectuer la correspondance entre les
-			// valeurs de <tabBitString> et les paramètres conditionnels.
-			// Selon la correspondance des trois bits et les paramètres conditionnels, on ajoute
-			// à <tabBitString> la valeur du bit associé, 0 ou 1.
+			// valeurs de <tabBitString> et les parametres conditionnels.
+			// Selon la correspondance des trois bits et les parametres conditionnels, on ajoute
+			// a <tabBitString> la valeur du bit associe, 0 ou 1.
 			
 			switch(tabBitString) {
 			case  "[true, false, true]":
@@ -107,7 +107,7 @@ public class DecodageCanal extends Transmetteur<Boolean,Boolean> {
 				informationDecodee.add(true);
 			}
 		} 
-		// on envoie le signal décodé
+		// on envoie le signal decode
 		for ( DestinationInterface<Boolean> destinationConnectee : destinationsConnectees) {
 			destinationConnectee.recevoir(informationDecodee);
 		}

@@ -6,6 +6,12 @@ import destinations.DestinationInterface;
 import information.Information;
 import information.InformationNonConformeException;
 
+/**
+ * Le genereteur de bruit gaussien genere du bruit suivant une loi gaussienne, et l'ajoute au signal echantillon / echantillon.
+ * En sortie nous aurons donc un signal plus ou moins bruite en fonction de la valeur du SNR
+ * @author ggurv
+ *
+ */
 public class GenerateurBruitGaussien extends Transmetteur<Float,Float>{
 
 	private int nbEch; // represente N = Te*Fe
@@ -111,6 +117,7 @@ public class GenerateurBruitGaussien extends Transmetteur<Float,Float>{
 		// on passe en log le snr pour effectuer le calcul
 		float logSnr = (float)Math.pow(10, snr/10);
 		
+		// calcul des slides informatives
 		sigma = (float)Math.sqrt((ps*nbEch)/(2*logSnr));
 		
 		return sigma;

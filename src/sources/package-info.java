@@ -1,4 +1,4 @@
 /**
- * Toutes les sources disponibles, qui doivent implémenter l'interface SourceInterface
+ * Toutes les sources disponibles, qui doivent implementer l'interface SourceInterface
  */
 package sources;

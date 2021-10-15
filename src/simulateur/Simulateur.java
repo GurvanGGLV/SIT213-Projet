@@ -24,8 +24,8 @@ import java.util.Iterator;
 
 /**
  * 
- * La classe Simulateur permet de construire et simuler une cha�ne de
- * transmission compos�e d'une Source, d'un nombre variable de Transmetteur(s)
+ * La classe Simulateur permet de construire et simuler une chaene de
+ * transmission composee d'une Source, d'un nombre variable de Transmetteur(s)
  * et d'une Destination.
  * 
  * @author cousin
@@ -41,26 +41,26 @@ public class Simulateur {
 	private boolean affichage = false;
 
 	/**
-	 * indique si le Simulateur utilise un message g�n�r� de mani�re al�atoire
-	 * (message impos� sinon)
+	 * indique si le Simulateur utilise un message genere de maniere aleatoire
+	 * (message impose sinon)
 	 */
 	private boolean messageAleatoire = true;
 
 	/**
-	 * indique si le Simulateur utilise un germe pour initialiser les g�n�rateurs
-	 * al�atoires
+	 * indique si le Simulateur utilise un germe pour initialiser les generateurs
+	 * aleatoires
 	 */
 	private boolean aleatoireAvecGerme = false;
 
-	/** la valeur de la semence utilis�e pour les g�n�rateurs al�atoires */
-	private Integer seed = null; // pas de semence par d�faut
+	/** la valeur de la semence utilisee pour les generateurs aleatoires */
+	private Integer seed = null; // pas de semence par defaut
 
 	/**
-	 * la longueur du message al�atoire � transmettre si un message n'est pas impos�
+	 * la longueur du message aleatoire e transmettre si un message n'est pas impose
 	 */
 	private int nbBitsMess = 100;
 
-	/** la cha�ne de caract�res correspondant � m dans l'argument -mess m */
+	/** la chaene de caracteres correspondant e m dans l'argument -mess m */
 	private String messageString = "100";
 
 	/** le composant Source de la chaine de transmission */
@@ -75,16 +75,16 @@ public class Simulateur {
 	/** indique si la transmition est analogique */
 	private boolean transAnalogique = false;
 
-	/** indique si la transmition est bruitée pour une transmission analogique */
+	/** indique si la transmition est bruitee pour une transmission analogique */
 	private boolean transBruitee = false;
 
 	/** indique si la transmition est multitrajet pour une transmission analogique*/
 	private boolean transMultiTraj = false;
 	
-	/** la valeur du rapport signal sur bruit entrée en argument */
+	/** la valeur du rapport signal sur bruit entree en argument */
 	private float snr = 0;
 
-	/** le nombre d'échantillons */
+	/** le nombre d'echantillons */
 	private int ne = 30;
 
 	/** l'amplitude max et min */
@@ -99,26 +99,26 @@ public class Simulateur {
 	private String form = "RZ";
 	
 	
-	/** indique la présence de trajets multiples */
+	/** indique la presence de trajets multiples */
 	ArrayList<Integer> listTaus = new ArrayList<>();
 	ArrayList<Float> listAlphas = new ArrayList<>();
 
 	/**
-	 * Le constructeur de Simulateur construit une cha�ne de transmission compos�e
+	 * Le constructeur de Simulateur construit une chaene de transmission composee
 	 * d'une Source <Boolean>, d'une Destination <Boolean> et de Transmetteur(s)
-	 * [voir la m�thode analyseArguments]... <br>
-	 * Les diff�rents composants de la cha�ne de transmission (Source,
-	 * Transmetteur(s), Destination, Sonde(s) de visualisation) sont cr��s et
-	 * connect�s.
+	 * [voir la methode analyseArguments]... <br>
+	 * Les differents composants de la chaene de transmission (Source,
+	 * Transmetteur(s), Destination, Sonde(s) de visualisation) sont crees et
+	 * connectes.
 	 * 
-	 * @param args le tableau des diff�rents arguments.
+	 * @param args le tableau des differents arguments.
 	 *
 	 * @throws ArgumentsException si un des arguments est incorrect
 	 *
 	 */
 	public Simulateur(String[] args) throws ArgumentsException {
 
-		// analyser et r�cup�rer les arguments
+		// analyser et recuperer les arguments
 		analyseArguments(args);
 
 		// instanciation de la source suivant la valeur des arguments
@@ -134,21 +134,21 @@ public class Simulateur {
 		// instanciation de la destination
 		destination = new DestinationFinale();
 
-		// création d'un emetteur analogique si précisé en argument
+		// creation d'un emetteur analogique si precise en argument
 		
-		if(codage == true ) { // si la transmission est codée
+		if(codage == true ) { // si la transmission est codee
 			// instanciation du codage Canal
 			CodageCanal codageCanal = new CodageCanal();
 			DecodageCanal decodageCanal = new DecodageCanal();
 			
 			if (transAnalogique == true) { //si la transmission est analogique
 	
-				// instanciation de l'émetteur et du décodeur
+				// instanciation de l'emetteur et du decodeur
 				EmetteurAnalogique emetteurAnalogique = new EmetteurAnalogique(form, ne, min, max);
 				DecodeurAnalogique decodeurAnalogique = new DecodeurAnalogique(form, ne, min, max);
 	
-				if (transBruitee == true) { // si la transmission est bruitée
-					// instanciation du générateur de bruit
+				if (transBruitee == true) { // si la transmission est bruitee
+					// instanciation du generateur de bruit
 					GenerateurBruitGaussien generateurBruit = new GenerateurBruitGaussien(snr, ne);
 					/*
 					if (aleatoireAvecGerme) {
@@ -157,12 +157,12 @@ public class Simulateur {
 						generateurBruit = new GenerateurBruitGaussien(snr, ne);
 					}*/
 					
-					if(transMultiTraj == true) { // si la transmission subit des décalages
+					if(transMultiTraj == true) { // si la transmission subit des decalages
 						//instanciation du multi-trajet
 						EmetteurMultiTrajets emetteurMT = new EmetteurMultiTrajets(listTaus, listAlphas);
 						//RecepteurMultiTrajets recepteurMT = new RecepteurMultiTrajets(listTaus, listAlphas);
 						
-						//connexion des différents éléments du système
+						//connexion des differents elements du systeme
 						source.connecter(codageCanal);
 						codageCanal.connecter(emetteurAnalogique);
 						emetteurAnalogique.connecter(emetteurMT);
@@ -174,11 +174,11 @@ public class Simulateur {
 						
 						if (affichage == true) { //si l'on souhaite afficher les graphes
 	
-							// Création des sondes
+							// Creation des sondes
 							Sonde<Boolean> sondeL = new SondeLogique("Signal Source", 10);
 							Sonde<Float> sondeE = new SondeAnalogique("Signal Analogique Entree");
-							Sonde<Float> sondeB = new SondeAnalogique("Signal Bruité");
-							Sonde<Boolean> sondeC = new SondeLogique("Signal Sortie Décodeur", 10);
+							Sonde<Float> sondeB = new SondeAnalogique("Signal Bruite");
+							Sonde<Boolean> sondeC = new SondeLogique("Signal Sortie Decodeur", 10);
 							Sonde<Float> sondeEMT = new SondeAnalogique("Signal sortie emetteur MT");
 							Sonde<Float> sondeRMT = new SondeAnalogique("Signal sortie recepteur MT");
 							Sonde<Boolean> sondeCodage = new SondeLogique("Sonde Sortie Codage", 10);
@@ -195,8 +195,8 @@ public class Simulateur {
 							decodageCanal.connecter(sondeDeodage);
 						}
 						
-					} else { // si la transmission ne subit pas de décalage
-						//connexion des différents éléments du système
+					} else { // si la transmission ne subit pas de decalage
+						//connexion des differents elements du systeme
 						source.connecter(codageCanal);
 						codageCanal.connecter(emetteurAnalogique);
 						emetteurAnalogique.connecter(generateurBruit);
@@ -206,11 +206,11 @@ public class Simulateur {
 						
 						if (affichage == true) { //si l'on souhaite afficher les graphes
 							
-							// Création des sondes
+							// Creation des sondes
 							Sonde<Boolean> sondeL = new SondeLogique("Signal Source", 10);
 							Sonde<Float> sondeE = new SondeAnalogique("Signal Analogique Entree");
-							Sonde<Float> sondeB = new SondeAnalogique("Signal Bruité");
-							Sonde<Boolean> sondeC = new SondeLogique("Signal Récepteur", 10);
+							Sonde<Float> sondeB = new SondeAnalogique("Signal Bruite");
+							Sonde<Boolean> sondeC = new SondeLogique("Signal Recepteur", 10);
 							Sonde<Boolean> sondeCodage = new SondeLogique("Sonde Sortie Codage", 10);
 							Sonde<Boolean> sondeDeodage = new SondeLogique("Sonde Sortie Decodage", 10);
 	
@@ -224,13 +224,13 @@ public class Simulateur {
 						}
 					}
 	
-				} else { // si la transmission n'est pas bruitée
+				} else { // si la transmission n'est pas bruitee
 	
-					if(transMultiTraj == true) { // si la transmission subit des décalages
+					if(transMultiTraj == true) { // si la transmission subit des decalages
 						EmetteurMultiTrajets emetteurMT = new EmetteurMultiTrajets(listTaus, listAlphas);
 						RecepteurMultiTrajets recepteurMT = new RecepteurMultiTrajets(listTaus, listAlphas);
 						
-						//connexion des différents éléments du système
+						//connexion des differents elements du systeme
 						source.connecter(emetteurAnalogique);
 						emetteurAnalogique.connecter(emetteurMT);
 						emetteurMT.connecter(recepteurMT);
@@ -239,10 +239,10 @@ public class Simulateur {
 						
 						if (affichage == true) {
 	
-							// Création des sondes
+							// Creation des sondes
 							Sonde<Boolean> sondeL = new SondeLogique("Signal Source", 10);
 							Sonde<Float> sondeE = new SondeAnalogique("Signal Analogique Entree");
-							Sonde<Boolean> sondeC = new SondeLogique("Signal Sortie Décodeur", 10);
+							Sonde<Boolean> sondeC = new SondeLogique("Signal Sortie Decodeur", 10);
 							Sonde<Float> sondeEMT = new SondeAnalogique("Signal sortie emetteur MT");
 							Sonde<Float> sondeRMT = new SondeAnalogique("Signal sortie recepteur MT");
 							Sonde<Boolean> sondeCodage = new SondeLogique("Sonde Sortie Codage", 10);
@@ -257,8 +257,8 @@ public class Simulateur {
 							codageCanal.connecter(sondeCodage);
 							decodageCanal.connecter(sondeDeodage);
 						}
-					} else { // si la transmission ne subit pas de décalage
-						//connexion des différents éléments du système
+					} else { // si la transmission ne subit pas de decalage
+						//connexion des differents elements du systeme
 						source.connecter(codageCanal);
 						codageCanal.connecter(emetteurAnalogique);
 						emetteurAnalogique.connecter(decodeurAnalogique);
@@ -267,10 +267,10 @@ public class Simulateur {
 						
 						if (affichage == true) {
 							
-							// Création des sondes
+							// Creation des sondes
 							Sonde<Boolean> sondeL = new SondeLogique("Signal Source", 10);
 							Sonde<Float> sondeE = new SondeAnalogique("Signal Analogique Entree");
-							Sonde<Boolean> sondeC = new SondeLogique("Signal Sortie Décodeur", 10);
+							Sonde<Boolean> sondeC = new SondeLogique("Signal Sortie Decodeur", 10);
 							Sonde<Boolean> sondeCodage = new SondeLogique("Sonde Sortie Codage", 10);
 							Sonde<Boolean> sondeDeodage = new SondeLogique("Sonde Sortie Decodage", 10);
 	
@@ -285,7 +285,7 @@ public class Simulateur {
 				}
 				
 			} else { //si la transmission est numerique
-				//connexion des différents éléments du système
+				//connexion des differents elements du systeme
 				source.connecter(codageCanal);
 				codageCanal.connecter(decodageCanal);
 				decodageCanal.connecter(transmetteurLogique);
@@ -306,16 +306,16 @@ public class Simulateur {
 				}
 			}
 			
-		} else { // si la transmission n'est pas codée
+		} else { // si la transmission n'est pas codee
 			
 			if (transAnalogique == true) { //si la transmission est analogique
 				
-				// instanciation de l'émetteur et du décodeur
+				// instanciation de l'emetteur et du decodeur
 				EmetteurAnalogique emetteurAnalogique = new EmetteurAnalogique(form, ne, min, max);
 				DecodeurAnalogique decodeurAnalogique = new DecodeurAnalogique(form, ne, min, max);
 	
-				if (transBruitee == true) { // si la transmission est bruitée
-					// instanciation du générateur de bruit
+				if (transBruitee == true) { // si la transmission est bruitee
+					// instanciation du generateur de bruit
 					
 					GenerateurBruitGaussien generateurBruit = new GenerateurBruitGaussien(snr, ne);
 					
@@ -326,12 +326,12 @@ public class Simulateur {
 						generateurBruit = new GenerateurBruitGaussien(snr, ne);
 					} */
 					
-					if(transMultiTraj == true) { // si la transmission subit des décalages
+					if(transMultiTraj == true) { // si la transmission subit des decalages
 						//instanciation du multi-trajet
 						EmetteurMultiTrajets emetteurMT = new EmetteurMultiTrajets(listTaus, listAlphas);
 						//RecepteurMultiTrajets recepteurMT = new RecepteurMultiTrajets(listTaus, listAlphas);
 						
-						//connexion des différents éléments du système
+						//connexion des differents elements du systeme
 						source.connecter(emetteurAnalogique);
 						emetteurAnalogique.connecter(emetteurMT);
 						emetteurMT.connecter(generateurBruit);
@@ -342,11 +342,11 @@ public class Simulateur {
 						
 						if (affichage == true) { //si l'on souhaite afficher les graphes
 							
-							// Création des sondes
+							// Creation des sondes
 							Sonde<Boolean> sondeL = new SondeLogique("Signal Source", 10);
 							Sonde<Float> sondeE = new SondeAnalogique("Signal Analogique Entree");
-							Sonde<Float> sondeB = new SondeAnalogique("Signal Bruité");
-							Sonde<Boolean> sondeC = new SondeLogique("Signal Sortie Décodeur", 10);
+							Sonde<Float> sondeB = new SondeAnalogique("Signal Bruite");
+							Sonde<Boolean> sondeC = new SondeLogique("Signal Sortie Decodeur", 10);
 							Sonde<Float> sondeEMT = new SondeAnalogique("Signal sortie emetteur MT");
 							Sonde<Float> sondeRMT = new SondeAnalogique("Signal sortie recepteur MT");
 	
@@ -359,8 +359,8 @@ public class Simulateur {
 							//recepteurMT.connecter(sondeRMT);
 						}
 						
-					} else { // si la transmission ne subit pas de décalage
-						//connexion des différents éléments du système
+					} else { // si la transmission ne subit pas de decalage
+						//connexion des differents elements du systeme
 						source.connecter(emetteurAnalogique);
 						emetteurAnalogique.connecter(generateurBruit);
 						generateurBruit.connecter(decodeurAnalogique);
@@ -368,11 +368,11 @@ public class Simulateur {
 						
 						if (affichage == true) { //si l'on souhaite afficher les graphes
 							
-							// Création des sondes
+							// Creation des sondes
 							Sonde<Boolean> sondeL = new SondeLogique("Signal Source", 10);
 							Sonde<Float> sondeE = new SondeAnalogique("Signal Analogique Entree");
-							Sonde<Float> sondeB = new SondeAnalogique("Signal Bruité");
-							Sonde<Boolean> sondeC = new SondeLogique("Signal Sortie Décodeur", 10);
+							Sonde<Float> sondeB = new SondeAnalogique("Signal Bruite");
+							Sonde<Boolean> sondeC = new SondeLogique("Signal Sortie Decodeur", 10);
 	
 							// Connexion des sondes
 							source.connecter(sondeL);
@@ -382,13 +382,13 @@ public class Simulateur {
 						}
 					}
 	
-				} else { // si la transmission n'est pas bruitée
+				} else { // si la transmission n'est pas bruitee
 	
-					if(transMultiTraj == true) { // si la transmission subit des décalages
+					if(transMultiTraj == true) { // si la transmission subit des decalages
 						EmetteurMultiTrajets emetteurMT = new EmetteurMultiTrajets(listTaus, listAlphas);
 						RecepteurMultiTrajets recepteurMT = new RecepteurMultiTrajets(listTaus, listAlphas);
 						
-						//connexion des différents éléments du système
+						//connexion des differents elements du systeme
 						source.connecter(emetteurAnalogique);
 						emetteurAnalogique.connecter(emetteurMT);
 						emetteurMT.connecter(recepteurMT);
@@ -397,10 +397,10 @@ public class Simulateur {
 						
 						if (affichage == true) {
 	
-							// Création des sondes
+							// Creation des sondes
 							Sonde<Boolean> sondeL = new SondeLogique("Signal Source", 10);
 							Sonde<Float> sondeE = new SondeAnalogique("Signal Analogique Entree");
-							Sonde<Boolean> sondeC = new SondeLogique("Signal Sortie Décodeur", 10);
+							Sonde<Boolean> sondeC = new SondeLogique("Signal Sortie Decodeur", 10);
 							Sonde<Float> sondeEMT = new SondeAnalogique("Signal sortie emetteur MT");
 							Sonde<Float> sondeRMT = new SondeAnalogique("Signal sortie recepteur MT");
 	
@@ -411,18 +411,18 @@ public class Simulateur {
 							emetteurMT.connecter(sondeEMT);
 							recepteurMT.connecter(sondeRMT);
 						}
-					} else { // si la transmission ne subit pas de décalage
-						//connexion des différents éléments du système
+					} else { // si la transmission ne subit pas de decalage
+						//connexion des differents elements du systeme
 						source.connecter(emetteurAnalogique);
 						emetteurAnalogique.connecter(decodeurAnalogique);
 						decodeurAnalogique.connecter(destination);
 						
 						if (affichage == true) {
 							
-							// Création des sondes
+							// Creation des sondes
 							Sonde<Boolean> sondeL = new SondeLogique("Signal Source", 10);
 							Sonde<Float> sondeE = new SondeAnalogique("Signal Analogique Entree");
-							Sonde<Boolean> sondeC = new SondeLogique("Signal Sortie Décodeur", 10);
+							Sonde<Boolean> sondeC = new SondeLogique("Signal Sortie Decodeur", 10);
 	
 							// Connexion des sondes
 							source.connecter(sondeL);
@@ -433,7 +433,7 @@ public class Simulateur {
 				}
 				
 			} else { //si la transmission est numerique
-				//connexion des différents éléments du système
+				//connexion des differents elements du systeme
 				source.connecter(transmetteurLogique);
 				transmetteurLogique.connecter(destination);
 				
@@ -450,24 +450,24 @@ public class Simulateur {
 	}
 
 	/**
-	 * La m�thode analyseArguments extrait d'un tableau de cha�nes de caract�res les
-	 * diff�rentes options de la simulation. <br>
-	 * Elle met � jour les attributs correspondants du Simulateur.
+	 * La methode analyseArguments extrait d'un tableau de chaenes de caracteres les
+	 * differentes options de la simulation. <br>
+	 * Elle met e jour les attributs correspondants du Simulateur.
 	 *
-	 * @param args le tableau des diff�rents arguments. <br>
+	 * @param args le tableau des differents arguments. <br>
 	 *             <br>
-	 *             Les arguments autoris�s sont : <br>
+	 *             Les arguments autorises sont : <br>
 	 *             <dl>
 	 *             <dt>-mess m</dt>
-	 *             <dd>m (String) constitu� de 7 ou plus digits � 0 | 1, le message
-	 *             � transmettre</dd>
+	 *             <dd>m (String) constitue de 7 ou plus digits e 0 | 1, le message
+	 *             e transmettre</dd>
 	 *             <dt>-mess m</dt>
-	 *             <dd>m (int) constitu� de 1 � 6 digits, le nombre de bits du
-	 *             message "al�atoire" � transmettre</dd>
+	 *             <dd>m (int) constitue de 1 e 6 digits, le nombre de bits du
+	 *             message "aleatoire" e transmettre</dd>
 	 *             <dt>-s</dt>
 	 *             <dd>pour demander l'utilisation des sondes d'affichage</dd>
 	 *             <dt>-seed v</dt>
-	 *             <dd>v (int) d'initialisation pour les g�n�rateurs al�atoires</dd>
+	 *             <dd>v (int) d'initialisation pour les generateurs aleatoires</dd>
 	 *             </dl>
 	 *
 	 * @throws ArgumentsException si un des arguments est incorrect.
@@ -499,7 +499,7 @@ public class Simulateur {
 				if (args[i].matches("[0,1]{7,}")) { // au moins 7 digits
 					messageAleatoire = false;
 					nbBitsMess = args[i].length();
-				} else if (args[i].matches("[0-9]{1,6}")) { // de 1 � 6 chiffres
+				} else if (args[i].matches("[0-9]{1,6}")) { // de 1 e 6 chiffres
 					messageAleatoire = true;
 					nbBitsMess = Integer.valueOf(args[i]);
 					if (nbBitsMess < 1)
@@ -579,7 +579,7 @@ public class Simulateur {
 			}
 			
 			
-			// TODO : ajouter ci-apr�s le traitement des nouvelles options
+			// TODO : ajouter ci-apres le traitement des nouvelles options
 
 			else
 				throw new ArgumentsException("Option invalide :" + args[i]);
@@ -588,10 +588,10 @@ public class Simulateur {
 	}
 
 	/**
-	 * La m�thode execute effectue un envoi de message par la source de la cha�ne de
+	 * La methode execute effectue un envoi de message par la source de la chaene de
 	 * transmission du Simulateur.
 	 *
-	 * @throws Exception si un probl�me survient lors de l'ex�cution
+	 * @throws Exception si un probleme survient lors de l'execution
 	 *
 	 */
 	public void execute() throws Exception {
@@ -599,8 +599,8 @@ public class Simulateur {
 	}
 
 	/**
-	 * La m�thode qui calcule le taux d'erreur binaire en comparant les bits du
-	 * message �mis avec ceux du message re�u.
+	 * La methode qui calcule le taux d'erreur binaire en comparant les bits du
+	 * message emis avec ceux du message reeu.
 	 *
 	 * @return La valeur du Taux dErreur Binaire.
 	 */
@@ -626,7 +626,7 @@ public class Simulateur {
 		int nbErreur = 0;
 		int longueurSignalFinal = destination.getInformationRecue().nbElements();
 		
-		System.out.println("Entrée : " + longueurEmission + " Sortie : " + longueurSignalFinal);
+		System.out.println("Entree : " + longueurEmission + " Sortie : " + longueurSignalFinal);
 		
 		Information<Boolean> informationInitiale = source.getInformationEmise();
 		Information<Boolean> informationFinale = destination.getInformationRecue();
@@ -644,10 +644,10 @@ public class Simulateur {
 	}
 
 	/**
-	 * La fonction main instancie un Simulateur � l'aide des arguments param�tres et
-	 * affiche le r�sultat de l'ex�cution d'une transmission.
+	 * La fonction main instancie un Simulateur e l'aide des arguments parametres et
+	 * affiche le resultat de l'execution d'une transmission.
 	 * 
-	 * @param args les diff�rents arguments qui serviront � l'instanciation du
+	 * @param args les differents arguments qui serviront e l'instanciation du
 	 *             Simulateur.
 	 */
 	public static void main(String[] args) {
@@ -664,7 +664,7 @@ public class Simulateur {
 		try {
 			simulateur.execute();
 			String s = "java  Simulateur  ";
-			for (int i = 0; i < args.length; i++) { // copier tous les param�tres de simulation
+			for (int i = 0; i < args.length; i++) { // copier tous les parametres de simulation
 				s += args[i] + "  ";
 			}
 		System.out.println(s + "  =>   TEB : " + simulateur.calculTauxErreurBinaire());

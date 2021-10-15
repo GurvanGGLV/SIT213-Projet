@@ -5,7 +5,7 @@ package transmetteurs;
  * 
  * Description 				: Cette classe se compose des methodes recevoir() et emettre() ainsi que 
  * 							  des methodes de codage du canal de l'information. Elle a pour but de formater l'information numerique
- * 							  en une nouvelle information analogique codée.
+ * 							  en une nouvelle information analogique codee.
  * 
  * Version 					: 1.0
  * 
@@ -31,7 +31,7 @@ public class CodageCanal extends Transmetteur<Boolean,Boolean> {
 	}
 	
 	/**
-	 * Méthode qui s'occupe de recevoir l'information de la classe utilisée précédemment
+	 * Methode qui s'occupe de recevoir l'information de la classe utilisee precedemment
 	 */
 	public void recevoir(Information<Boolean> information) throws InformationNonConformeException {
 		this.informationRecue = information;
@@ -40,8 +40,8 @@ public class CodageCanal extends Transmetteur<Boolean,Boolean> {
 
 	/** 
 	 * 
-	 * La methode emettre() de cette classe formate l'information selon la table de correspondance associée.
-	 * Elle instancie un attribut <informationCodee> qui sera envoyé au prochain élément de la chaine
+	 * La methode emettre() de cette classe formate l'information selon la table de correspondance associee.
+	 * Elle instancie un attribut <informationCodee> qui sera envoye au prochain element de la chaine
 	 * de transmission.
 	 * 
 	 */
@@ -61,7 +61,7 @@ public class CodageCanal extends Transmetteur<Boolean,Boolean> {
 				informationCodee.add(false);
 			}
 		}
-		// puis on envoie l'information codée
+		// puis on envoie l'information codee
 		for ( DestinationInterface<Boolean> destinationConnectee : destinationsConnectees) {
 			destinationConnectee.recevoir(informationCodee);
 		}

@@ -72,7 +72,7 @@ public class GenerateurBruitGaussienTest
 		informationAnalogique1 = bruit1.informationRecue;
 		informationAnalogique2 = bruit2.informationRecue;
 		
-		//TODO calculer valeur théorique pour comparer
+		//TODO calculer valeur theorique pour comparer
 		collector.checkThat("Test de calculPuissance 1", bruit1.calculPuissance(informationAnalogique1), is(0.0F));
 		collector.checkThat("Test de calculPuissance 2", bruit2.calculPuissance(informationAnalogique2), is(0.0F));
 	}
@@ -83,7 +83,7 @@ public class GenerateurBruitGaussienTest
 	@Test
 	public void testCalculBruit()
 	{	
-		//TODO calculer valeur théorique pour comparer
+		//TODO calculer valeur theorique pour comparer
 		collector.checkThat("Test de calculBruit 1", bruit1.calculBruit(3), is(0.0F)); // null pour la seed. Verifier si on peut changer ca
 		collector.checkThat("Test de calculBruit 2", bruit2.calculBruit(5), is(0.0F));
 	}
@@ -91,7 +91,7 @@ public class GenerateurBruitGaussienTest
 	@Test
 	public void testCalculSigma()
 	{
-		//TODO calculer valeur théorique pour comparer
+		//TODO calculer valeur theorique pour comparer
 		collector.checkThat("Test de calculBruit 1", bruit1.calculSigma(), is(0.0F));
 		collector.checkThat("Test de calculBruit 2", bruit2.calculSigma(), is(0.0F));
 	}

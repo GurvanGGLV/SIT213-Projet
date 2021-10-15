@@ -5,7 +5,7 @@ package transmetteurs;
  * 
  * Description 				: Cette classe se compose des methodes recevoir() et emettre() ainsi que 
  * 							  des methodes de transmission de l'information. Elle a pour but de reconstituer l'information numerique
- * 							  à partir de l'information analogique reçue (bruitee ou non).
+ * 							  a partir de l'information analogique reçue (bruitee ou non).
  * 
  * Version 					: 2.0
  * 
@@ -25,14 +25,14 @@ import transmetteurs.EmetteurAnalogique;
 public class DecodeurAnalogique extends Transmetteur<Float, Boolean> 
 {
 
-	private String forme; // va nous permettre de choisir le type de décodage
+	private String forme; // va nous permettre de choisir le type de decodage
 	private int nEch; // sert aux calculs
 	private float min; // sert aux calculs
 	private float max; // sert aux calculs
 	protected Information<Boolean> informationNumerique; // va contenir l'information decodee
 	
 	private double esperance; // variable nous servant a faire de la prise de decision
-	private double somme = 0; // cette variable va contenir la somme de tous les échantillons sur un tBit
+	private double somme = 0; // cette variable va contenir la somme de tous les echantillons sur un tBit
 	private int compteurEch = 0;
 	
 	/**
@@ -79,7 +79,7 @@ public class DecodeurAnalogique extends Transmetteur<Float, Boolean>
 	
 	/**
 	 * La methode decodeur permet de decoder l'information analogique reçue et codee par le code en ligne NRZT ou NRZ (No Return to Zero). 
-	 * Pour cela, on fixe un seuil à la valeur (max + min)/2 puis on calcule la valeur moyenne de chaque bit reçu. Si celle-ci est
+	 * Pour cela, on fixe un seuil a la valeur (max + min)/2 puis on calcule la valeur moyenne de chaque bit reçu. Si celle-ci est
 	 * au dessus du seuil, le bit reçu est 1, sinon c'est un 0.
 	 *  
 	 * @param nEch
@@ -114,7 +114,7 @@ public class DecodeurAnalogique extends Transmetteur<Float, Boolean>
 	
 	/**
 	 * La methode decodRZ permet de decoder l'information analogique reçue et codee par le code en ligne RZ (Return to Zero). 
-	 * Pour cela, on fixe un seuil à la valeur max/3 puis on calcule la valeur moyenne de chaque bit reçu. Si celle-ci est
+	 * Pour cela, on fixe un seuil a la valeur max/3 puis on calcule la valeur moyenne de chaque bit reçu. Si celle-ci est
 	 * au dessus du seuil, le bit reçu est 1, sinon c'est un 0.
 	 *  
 	 * @param nEch

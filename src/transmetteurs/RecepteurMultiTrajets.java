@@ -7,9 +7,9 @@ import information.Information;
 import information.InformationNonConformeException;
 
 /**
- * Cette classe récupère l'information multi trajets créée à partir de la classe EmetteutMultiTrajets.
- * Elle va la traiter de manière à régénérer l'information initiale qui était informationAnalogique
- * @author Gurvan, Aurélien
+ * Cette classe recupere l'information multi trajets creee a partir de la classe EmetteutMultiTrajets.
+ * Elle va la traiter de maniere a regenerer l'information initiale qui etait informationAnalogique
+ * @author Gurvan, Aurelien
  *
  */
 public class RecepteurMultiTrajets extends Transmetteur<Float,Float> {
@@ -33,8 +33,8 @@ public class RecepteurMultiTrajets extends Transmetteur<Float,Float> {
 
 	public void emettre() throws InformationNonConformeException {
 		
-		int longueurUtile = informationRecue.nbElements() - this.getTauMax(); // comme ça on connaît la longueur réelle de notre signal
-		informationTiTraitee = new Information<Float>(); // variable qui va contenir le signal nettoyé des multi-trajets
+		int longueurUtile = informationRecue.nbElements() - this.getTauMax(); // comme ça on connait la longueur reelle de notre signal
+		informationTiTraitee = new Information<Float>(); // variable qui va contenir le signal nettoye des multi-trajets
 		
 		Information<Float> signalInitial = new Information<Float>();
 		
@@ -42,37 +42,38 @@ public class RecepteurMultiTrajets extends Transmetteur<Float,Float> {
 			signalInitial.add(inf);
 		}
 		
-		// ce qu'on veut maintenant c'est nettoyer le signal rajouté pour chaque décalage
+		// ce qu'on veut maintenant c'est nettoyer le signal rajoute pour chaque decalage
 		
-		for(int pos=0 ; pos<longueurUtile ; pos++) { // on va regarder chaque échantillon jusqu'à la longueur utile du signal
-			float temp = signalInitial.iemeElement(pos); // va nous servir à faire les opérations de nettoyage
+		for(int pos=0 ; pos<longueurUtile ; pos++) { // on va regarder chaque echantillon jusqu'a la longueur utile du signal
+			float temp = signalInitial.iemeElement(pos); // va nous servir a faire les operations de nettoyage
 			// pour ensuite remplacer dans le nouveau signal
-			for(int i=0 ; i<listTaus.size() ; i++) { // on fait l'opération inverse de l'emetteur
+			for(int i=0 ; i<listTaus.size() ; i++) { // on fait l'operation inverse de l'emetteur
 				
 				int decalage = listTaus.get(i);
-				if(pos>=decalage) { // on regarde quand on arrive au décalage
-					// une fois qu'on est arrivé au décalage 
+				if(pos>=decalage) { // on regarde quand on arrive au decalage
+					// une fois qu'on est arrive au decalage 
 					temp = temp - (listAlphas.get(i)*signalInitial.iemeElement(pos-decalage));
 				}
 			}
-			// une fois qu'on a la valeur réelle de l'échantillon initial on remplace
+			// une fois qu'on a la valeur reelle de l'echantillon initial on remplace
 			signalInitial.setIemeElement(pos, temp);
 		}
 		
-		// quand on a enfin récupéré le signal complet, sans les valeurs à 0 qui sont dûes à tau max
+		// quand on a enfin recupere le signal complet, sans les valeurs a 0 qui sont dues a tau max
 		for(int i=0 ; i<longueurUtile ; i++) {
 			informationTiTraitee.add(signalInitial.iemeElement(i));
 		}
 		
-		
-		// quand on a enfin récupéré l'info initiale, on envoie
+		// quand on a enfin recupere l'info initiale, on envoie
 		for(DestinationInterface<Float> destinationConnectee : destinationsConnectees) {
 			destinationConnectee.recevoir(informationTiTraitee);
 		}
 		this.informationEmise = informationTiTraitee;
 	}
 	
-
+	/**
+	 * @return la valeur max du decalage
+	 */
 	public int getTauMax() {
 		int tMax = listTaus.get(0);
 		for(int t : listTaus) {

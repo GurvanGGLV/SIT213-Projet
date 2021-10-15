@@ -3,15 +3,15 @@ package visualisations;
 import information.Information;
 
 /** 
- * Classe réalisant l'affichage d'information composée d'éléments
- * réels (float)
+ * Classe realisant l'affichage d'information composee d'elements
+ * reels (float)
  * @author prou
  */
 public class SondeAnalogique extends Sonde <Float> {
    
     /**
      * pour construire une sonde analogique
-     * @param nom  le nom de la fenêtre d'affichage
+     * @param nom  le nom de la fenetre d'affichage
      */
     public SondeAnalogique(String nom) {
 	super(nom);
